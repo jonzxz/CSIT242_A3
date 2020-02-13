@@ -21,14 +21,16 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import static com.example.csit242_a3.MainActivity.PLAYER_NAME;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class HomeScreenFragment extends Fragment {
 
-    public static String PLAYER_NAME = "";
-    public static int SELECTED_LEVEL = 0;
+//    public static String PLAYER_NAME = "";
+//    public static int SELECTED_LEVEL = 0;
     public ArrayList<Button> quizBtns = new ArrayList<>();
 
     public HomeScreenFragment() {
@@ -78,7 +80,7 @@ public class HomeScreenFragment extends Fragment {
                                 String input = nameInput.getText().toString();
                                 TextView nameLabel = getActivity().findViewById(R.id.helloMsg);
                                 nameLabel.setText(String.format("Hello %s!", input));
-                                HomeScreenFragment.this.PLAYER_NAME = input;
+//                                HomeScreenFragment.this.PLAYER_NAME = input;
                                 ((MainActivity)getActivity()).PLAYER_NAME = input;
                             }
                         });
@@ -93,7 +95,8 @@ public class HomeScreenFragment extends Fragment {
             public void onClick(View v) {
                 deselectQuizes();
                 quizOneBtn.setBackgroundColor(Color.parseColor("#f0ad4e"));
-                HomeScreenFragment.this.SELECTED_LEVEL = 1;
+                ((MainActivity) getActivity()).SELECTED_LEVEL = 1;
+//                HomeScreenFragment.this.SELECTED_LEVEL = 1;
                 Log.d("BtnOne", "Level 1 selected!");
             }
 
@@ -104,7 +107,8 @@ public class HomeScreenFragment extends Fragment {
             public void onClick(View v) {
                 deselectQuizes();
                 quizTwoBtn.setBackgroundColor(Color.parseColor("#f0ad4e"));
-                HomeScreenFragment.this.SELECTED_LEVEL = 2;
+                ((MainActivity) getActivity()).SELECTED_LEVEL = 2;
+//                HomeScreenFragment.this.SELECTED_LEVEL = 2;
                 Log.d("BtnTwo", "Level 2 selected!");
             }
         });
@@ -114,7 +118,8 @@ public class HomeScreenFragment extends Fragment {
             public void onClick(View v) {
                 deselectQuizes();
                 quizThreeBtn.setBackgroundColor(Color.parseColor("#f0ad4e"));
-                HomeScreenFragment.this.SELECTED_LEVEL = 3;
+                ((MainActivity) getActivity()).SELECTED_LEVEL = 3;
+//                HomeScreenFragment.this.SELECTED_LEVEL = 3;
                 Log.d("BtnThree", "Level 3 selected!");
             }
         });
@@ -124,7 +129,8 @@ public class HomeScreenFragment extends Fragment {
             public void onClick(View v) {
                 deselectQuizes();
                 quizFourBtn.setBackgroundColor(Color.parseColor("#f0ad4e"));
-                HomeScreenFragment.this.SELECTED_LEVEL = 4;
+                ((MainActivity) getActivity()).SELECTED_LEVEL = 4;
+//                HomeScreenFragment.this.SELECTED_LEVEL = 4;
                 Log.d("BtnFour", "Level 4 selected!");
             }
         });
@@ -132,28 +138,35 @@ public class HomeScreenFragment extends Fragment {
         startBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switch (getSelectedLevel()) {
-                    case 0:
-                        Toast.makeText(getActivity(), "Please select a level", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 1:
-//                        fragmentManager.beginTransaction().replace(R.id.ForFrag, new HomeScreenFragment()).commit();
-                        ((MainActivity)getActivity()).fragmentManager.beginTransaction().replace(R.id.ForFrag, new AddFrag()).commit();
-                        Log.d("Level 1 selected", "Starting level 1!");
-                        break;
-                    case 2:
-                        Log.d("Level 2 selected", "Starting level 2!");
-                        break;
-                    case 3:
-                        Log.d("Level 3", "Starting level 3!");
-                        break;
-                    case 4:
-                        Log.d("Level 4", "Starting level 4!");
-                        break;
-                    default:
-                        Toast.makeText(getActivity(), "Please select a level", Toast.LENGTH_SHORT).show();
-                        break;
+                if (!(((MainActivity) getActivity()).isNameEmpty())) {
+                    switch (getSelectedLevel()) {
+                        case 0:
+                            Toast.makeText(getActivity(), "Please select a level", Toast.LENGTH_SHORT).show();
+                            break;
+                        case 1:
 
+//                        fragmentManager.beginTransaction().replace(R.id.ForFrag, new HomeScreenFragment()).commit();
+                            ((MainActivity) getActivity()).fragmentManager.beginTransaction().replace(R.id.ForFrag, new AddFrag()).commit();
+                            Log.d("Level 1 selected", "Starting level 1!");
+                            break;
+                        case 2:
+
+                            Log.d("Level 2 selected", "Starting level 2!");
+                            break;
+                        case 3:
+
+                            Log.d("Level 3", "Starting level 3!");
+                            break;
+                        case 4:
+
+                            Log.d("Level 4", "Starting level 4!");
+                            break;
+                        default:
+                            Toast.makeText(getActivity(), "Please select a level", Toast.LENGTH_SHORT).show();
+                            break;
+                    }
+                } else {
+                    Toast.makeText(getActivity(), "Enter your name!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -209,7 +222,8 @@ public class HomeScreenFragment extends Fragment {
     }
 
     private int getSelectedLevel() {
-        return this.SELECTED_LEVEL;
+        return ((MainActivity)getActivity()).SELECTED_LEVEL;
     }
+
 
 }

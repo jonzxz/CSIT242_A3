@@ -10,6 +10,7 @@ import android.os.Bundle;
 public class MainActivity extends AppCompatActivity {
 
     public static String PLAYER_NAME;
+    public static int SELECTED_LEVEL;
     public FragmentManager fragmentManager = getSupportFragmentManager();
 
     @Override
@@ -17,5 +18,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         fragmentManager.beginTransaction().replace(R.id.ForFrag, new HomeScreenFragment()).commit();
+    }
+
+
+    public boolean isNameEmpty() {
+        return (this.PLAYER_NAME == null);
     }
 }

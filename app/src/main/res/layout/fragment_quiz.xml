@@ -5,15 +5,64 @@
     android:id="@+id/questionContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".QuizFragment" >
+    tools:context=".QuizFragment">
 
     <TextView
         android:id="@+id/qnTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="176dp"
-        android:layout_marginBottom="398dp"
-        android:text="TextView"
+        android:layout_marginEnd="140dp"
+        android:layout_marginBottom="60dp"
+        android:text="x sym y"
+        android:textSize="50dp"
+        app:layout_constraintBottom_toTopOf="@+id/optionOne"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <TextView
+        android:id="@+id/qnNum"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="116dp"
+        android:layout_marginBottom="16dp"
+        android:text="Question i"
+        android:textSize="50dp"
+        app:layout_constraintBottom_toTopOf="@+id/qnTitle"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/optionOne"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_marginBottom="48dp"
+        android:text="optOne"
+        app:layout_constraintBottom_toTopOf="@+id/optionTwo"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/optionTwo"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_marginBottom="51dp"
+        android:text="optTwo"
+        app:layout_constraintBottom_toTopOf="@+id/optionThree"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/optionThree"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_marginBottom="47dp"
+        android:text="optThree"
+        app:layout_constraintBottom_toTopOf="@+id/nextBtn"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/nextBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="46dp"
+        android:layout_marginBottom="55dp"
+        android:text="NEXT"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

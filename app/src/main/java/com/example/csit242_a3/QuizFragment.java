@@ -11,10 +11,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Random;
+
+import static com.example.csit242_a3.MainActivity.SELECTED_LEVEL;
 
 
 /**
@@ -26,6 +31,8 @@ public class QuizFragment extends Fragment {
     ArrayList<Question> quizTwoQns = new ArrayList<>();
     ArrayList<Question> quizThreeQns = new ArrayList<>();
     ArrayList<Question> quizFourQns = new ArrayList<>();
+    ArrayList<Button> options = new ArrayList<>();
+
 
     public QuizFragment() {
         // Required empty public constructor
@@ -43,30 +50,31 @@ public class QuizFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        TextView questionNumber = (TextView) (getActivity().findViewById(R.id.qnNum));
         TextView questionTitle = (TextView) (getActivity().findViewById(R.id.qnTitle));
+        Button optionOne = (Button) (getActivity().findViewById(R.id.optionOne));
+        Button optionTwo = (Button) (getActivity().findViewById(R.id.optionTwo));
+        Button optionThree = (Button) (getActivity().findViewById(R.id.optionThree));
+        options.add(optionOne);
+        options.add(optionTwo);
+        options.add(optionThree);
 
-        questionTitle.setText(this.quizOneQns.get(0).toString());
+       switch (((MainActivity)getActivity()).SELECTED_LEVEL) {
+           case 1:
+               questionTitle.setText(this.quizOneQns.get(0).toString());
+               jumbleOptions(this.quizOneQns.get(0));
+               break;
+           case 2:
+               questionTitle.setText(this.quizTwoQns.get(0).toString());
+               break;
+           case 3:
+               questionTitle.setText(this.quizThreeQns.get(0).toString());
+               break;
+           case 4:
+               questionTitle.setText(this.quizFourQns.get(0).toString());
+               jumbleOptions(this.quizFourQns.get(0));
+               break;
 
-        for (Question q : this.quizOneQns) {
-            int i = 1;
-            Log.d(String.valueOf(i), q.toStringAnswer());
-            i++;
-        }
-        for (Question q : this.quizTwoQns) {
-            int i = 1;
-            Log.d(String.valueOf(i), q.toStringAnswer());
-            i++;
-        }
-        for (Question q : this.quizThreeQns) {
-            int i = 1;
-            Log.d(String.valueOf(i), q.toStringAnswer());
-            i++;
-        }
-        for (Question q : this.quizFourQns) {
-            int i = 1;
-            Log.d(String.valueOf(i), q.toStringAnswer());
-            i++;
         }
 
     }
@@ -96,6 +104,23 @@ public class QuizFragment extends Fragment {
             } while (xFour < yFour);
             this.quizFourQns.add(new Question(xFour, yFour, '/'));
         }
+    }
+
+    private void jumbleOptions(Question q) {
+        Random rng = new Random();
+        for (Button b: options) {
+
+            if (q.getSymbol() != '/') {
+                b.setText(String.valueOf(((int) q.getAnswer()) + rng.nextInt(5) +1));
+            }
+            b.setText(String.format("%.2f", (q.getAnswer()) + rng.nextInt(5) +1));
+        }
+
+        int correctButtonIdx = (int)Math.random() *3;
+        if (q.getSymbol() != '/') {
+            options.get(correctButtonIdx).setText(String.valueOf(((int) q.getAnswer()) + rng.nextInt(5)));
+        }
+        options.get(correctButtonIdx).setText(String.format("%.2f", (q.getAnswer())));
     }
 
 }

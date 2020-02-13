@@ -29,7 +29,7 @@ import static com.example.csit242_a3.MainActivity.PLAYER_NAME;
  */
 public class HomeScreenFragment extends Fragment {
 
-//    public static String PLAYER_NAME = "";
+    //    public static String PLAYER_NAME = "";
 //    public static int SELECTED_LEVEL = 0;
     public ArrayList<Button> quizBtns = new ArrayList<>();
 
@@ -139,31 +139,10 @@ public class HomeScreenFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 if (!(((MainActivity) getActivity()).isNameEmpty())) {
-                    switch (getSelectedLevel()) {
-                        case 0:
-                            Toast.makeText(getActivity(), "Please select a level", Toast.LENGTH_SHORT).show();
-                            break;
-                        case 1:
-
-//                        fragmentManager.beginTransaction().replace(R.id.ForFrag, new HomeScreenFragment()).commit();
-                            ((MainActivity) getActivity()).fragmentManager.beginTransaction().replace(R.id.ForFrag, new QuizFragment()).commit();
-                            Log.d("Level 1 selected", "Starting level 1!");
-                            break;
-                        case 2:
-
-                            Log.d("Level 2 selected", "Starting level 2!");
-                            break;
-                        case 3:
-
-                            Log.d("Level 3", "Starting level 3!");
-                            break;
-                        case 4:
-
-                            Log.d("Level 4", "Starting level 4!");
-                            break;
-                        default:
-                            Toast.makeText(getActivity(), "Please select a level", Toast.LENGTH_SHORT).show();
-                            break;
+                    if (((MainActivity)getActivity()).SELECTED_LEVEL != 0) {
+                        ((MainActivity) getActivity()).fragmentManager.beginTransaction().replace(R.id.ForFrag, new QuizFragment()).commit();
+                    } else {
+                        Toast.makeText(getActivity(), "Please select a level", Toast.LENGTH_SHORT).show();
                     }
                 } else {
                     Toast.makeText(getActivity(), "Enter your name!", Toast.LENGTH_SHORT).show();

@@ -10,7 +10,7 @@ import android.os.Bundle;
 public class MainActivity extends AppCompatActivity {
 
     public static String PLAYER_NAME;
-    public static int SELECTED_LEVEL;
+    public static int SELECTED_LEVEL = 0;
     public FragmentManager fragmentManager = getSupportFragmentManager();
 
     @Override

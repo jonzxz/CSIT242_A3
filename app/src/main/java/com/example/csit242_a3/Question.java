@@ -31,6 +31,10 @@ public class Question {
         return (String.format("%d %c %d", x, symbol, y));
     }
 
+    public double getAnswer() {
+        return this.answer;
+    }
+
     private void setAnswer() {
         if (this.symbol == '+') {
             this.answer = x + y;

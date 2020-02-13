@@ -1,5 +1,6 @@
 package com.example.csit242_a3;
 
+import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.content.Context;
@@ -13,7 +14,6 @@ public class DBHandler extends SQLiteOpenHelper {
     private static final String X = "X";
     private static final String Y = "Y";
     private static final String ANSWER = "ANSWER";
-    private static final String SYMBOL = "SYMBOL";
     private static final String CATEGORY = "CATEGORY";
 
     public DBHandler(Context context) {
@@ -24,7 +24,7 @@ public class DBHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 
         String CREATE_QN_TABLE = "CREATE TABLE " + QUESTIONS + "(" + ID + " INTEGER PRIMARY KEY,"
-                + X + " REAL," + Y + " REAL," + ANSWER + " REAL," + SYMBOL + " TEXT, " + CATEGORY + " TEXT)";
+                + X + " REAL," + Y + " REAL," + ANSWER + " REAL," + CATEGORY + " TEXT)";
         db.execSQL(CREATE_QN_TABLE);
     }
 
@@ -35,5 +35,18 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + QUESTIONS);
         // Creating tables again
         onCreate(db);
+    }
+
+    public void addQuestion(Question q) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(X, q.getX());
+        values.put(Y, q.getY());
+        values.put(ANSWER, q.getAnswer());
+        values.put(CATEGORY, q.getCategory());
+
+        db.insert(QUESTIONS, null, values);
+        db.close(); // Closing database connection
     }
 }

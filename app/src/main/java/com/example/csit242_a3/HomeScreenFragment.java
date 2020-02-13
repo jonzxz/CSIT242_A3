@@ -138,7 +138,7 @@ public class HomeScreenFragment extends Fragment {
                         break;
                     case 1:
 //                        fragmentManager.beginTransaction().replace(R.id.ForFrag, new HomeScreenFragment()).commit();
-                        ((MainActivity)getActivity()).fragmentManager.beginTransaction().replace(R.id.ForFrag, new AddFrag()).commit();
+                        ((MainActivity)getActivity()).fragmentManager.beginTransaction().replace(R.id.ForFrag, new QuizFragment()).commit();
                         Log.d("Level 1 selected", "Starting level 1!");
                         break;
                     case 2:

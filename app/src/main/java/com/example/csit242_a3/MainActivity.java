@@ -11,6 +11,8 @@ public class MainActivity extends AppCompatActivity {
 
     public static String PLAYER_NAME;
     public FragmentManager fragmentManager = getSupportFragmentManager();
+    public DBHandler db = new DBHandler(this);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

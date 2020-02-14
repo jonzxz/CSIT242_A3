@@ -35,6 +35,7 @@ public class QuizFragment extends Fragment {
     int qnNumDisplay = qnAnswered+1;
     private static int SELECTED_OPTION;
     private static int NUMBER_OF_QNS = 5;
+    Random rng = new Random();
 
 
     public QuizFragment() {
@@ -70,6 +71,8 @@ public class QuizFragment extends Fragment {
 
         final int selectedLevel = ((MainActivity)getActivity()).SELECTED_LEVEL-1; //1 = +, 2 = - but -1 here cuz array index
         int counter = 0;
+
+        // Initialize first question
         questionNumber.setText("Question " + String.valueOf(QuizFragment.this.qnNumDisplay));
         questionTitle.setText(((questionCategories.get(selectedLevel)).get(0)).toString());
         jumbleOptions(((questionCategories.get(selectedLevel)).get(0)));
@@ -100,7 +103,8 @@ public class QuizFragment extends Fragment {
                     Log.d("CHECK", String.valueOf(test));
                     ((MainActivity)getActivity()).SESSION_SCORE[selectedLevel] += countScore(String.valueOf(q.getAnswer()),
                             QuizFragment.this.options.get(QuizFragment.this.SELECTED_OPTION).getText().toString());
-                    // At 3rd question, replace listener for next question with result screen
+
+                    // At 4th question, replace listener for next question with result screen
                     if (qnAnswered == NUMBER_OF_QNS-1) {
                         nextButton.setText("FINISH");
                         nextButton.setOnClickListener(new View.OnClickListener() {
@@ -128,6 +132,8 @@ public class QuizFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 QuizFragment.this.SELECTED_OPTION = 0;
+                Log.d("single", String.valueOf(generateInt(1, 9)));
+                Log.d("double", String.valueOf(generateInt(10, 20)));
             }
         });
 
@@ -148,40 +154,82 @@ public class QuizFragment extends Fragment {
     }
 
     public void makeQuestions() {
-        int xOne, yOne, xTwo, yTwo, xThree, yThree, xFour, yFour;
-        for (int i = 0; i < NUMBER_OF_QNS; i ++) {
 
-            xOne = (int)(Math.random() * 10) + 1;
-            yOne = (int)(Math.random() * 10) + 1;
-            this.quizOneQns.add(new Question(xOne, yOne, '+'));
-
+        // For Addition Qn 1, 2 / Sub Qn 1, 2
+        for (int i = 0; i < 2; i++) {
+            int xSub, ySub;
+            this.quizOneQns.add(new Question(generateInt(1, 9), generateInt(1, 9), '+'));
             do {
-                xTwo = (int)(Math.random() * 10) + 1;
-                yTwo = (int)(Math.random() * 10) + 1;
-            } while (xTwo < yTwo);
-            this.quizTwoQns.add(new Question(xTwo, yTwo, '-'));
-
-
-            xThree = (int)(Math.random() * 10) + 1;
-            yThree = (int)(Math.random() * 10) + 1;
-            this.quizThreeQns.add(new Question(xThree, yThree, '*'));
-
-            do {
-                xFour = (int) (Math.random() * 10) + 1;
-                yFour = (int) (Math.random() * 10) + 1;
-            } while (xFour < yFour);
-            this.quizFourQns.add(new Question(xFour, yFour, '/'));
+                xSub = generateInt(1, 9);
+                ySub = generateInt(1, 9);
+            } while (xSub <= ySub);
+            this.quizTwoQns.add(new Question(xSub, ySub, '-'));
         }
+        // For Addition Qn 3, 4 / Sub Qn 3, 4
+        for (int i = 0; i < 2; i++) {
+            this.quizOneQns.add(new Question(generateInt(1, 9), generateInt(10, 99), '+'));
+            this.quizTwoQns.add(new Question(generateInt(10, 99), generateInt(1, 9), '-'));
+        }
+
+        // Addition Qn 5
+        this.quizOneQns.add(new Question(generateInt(10, 99), generateInt(10, 99), '+'));
+
+        // Subtraction Qn 5
+        int xSub, ySub;
+        do {
+            xSub = generateInt(10, 99);
+            ySub = generateInt(10, 99);
+            this.quizTwoQns.add(new Question(xSub, ySub, '-'));
+        } while (xSub <= ySub);
+
+        // Multiplication Qn 1
+        this.quizThreeQns.add(new Question(generateInt(1, 5), generateInt(1, 5), '*'));
+        // Multiplication Qn 2
+        this.quizThreeQns.add(new Question(generateInt(6, 9), generateInt(1, 5), '*'));
+        // Multiplication Qn 3
+        this.quizThreeQns.add(new Question(generateInt(1, 5), generateInt(6, 9), '*'));
+        // Multiplication Qn 4
+        this.quizThreeQns.add(new Question(generateInt(6, 9), generateInt(6, 9), '*'));
+        // Multiplication Qn 5
+        this.quizThreeQns.add(new Question(generateInt(10, 20), generateInt(1, 9), '*'));
+
+        // Division Qn 1, 2
+        for (int i = 0; i < 2; i ++) {
+            int xDiv, yDiv;
+            do {
+                xDiv = generateInt(4, 9);
+                yDiv = generateInt(2, 3);
+            } while (xDiv % yDiv != 0);
+            this.quizFourQns.add(new Question(xDiv, yDiv, '/'));
+        }
+
+        // Division Qn 3, 4
+        for (int i = 0; i < 2; i ++) {
+            int xDiv, yDiv;
+            do {
+                xDiv = generateInt(10, 20);
+                yDiv = getTwoThreeFive();
+            } while (xDiv % yDiv != 0);
+            this.quizFourQns.add(new Question(xDiv, yDiv, '/'));
+        }
+
+        // Division Qn 5
+        int xDiv, yDiv;
+        do {
+            xDiv = generateInt(22, 30);
+            yDiv = getTwoThreeFive();
+        } while (xDiv % yDiv != 0);
+        this.quizFourQns.add(new Question(xDiv, yDiv, '/'));
     }
 
     private void jumbleOptions(Question q) {
-        Random rng = new Random();
+
         for (Button b: options) {
 
             if (q.getSymbol() != '/') {
-                b.setText(String.valueOf(((int) q.getAnswer()) + rng.nextInt(5) +1) + ".0");
+                b.setText(String.valueOf(((int) q.getAnswer()) + rng.nextInt(15) +1) + ".0");
             } else
-                b.setText(String.format("%.1f", (q.getAnswer()) + rng.nextInt(5) +1));
+                b.setText(String.format("%.1f", (q.getAnswer()) + rng.nextInt(15) +1));
         }
 
         int correctButtonIdx = (int)Math.random() *3;
@@ -198,6 +246,16 @@ public class QuizFragment extends Fragment {
 
     private int countScore(String a, String b) {
         return (a.equals(b)) ? 1 : 0;
+    }
+
+    private int generateInt(int lBound, int uBound) {
+        return lBound + (int)(Math.random() * ((uBound - lBound) +1)); // both inclusive
+    }
+
+    private int getTwoThreeFive() {
+        int[] TwoThreeFive = {2, 3, 5};
+        int idx = generateInt(0, 2);
+        return TwoThreeFive[idx];
     }
 }
 

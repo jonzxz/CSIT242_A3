@@ -34,6 +34,7 @@ public class QuizFragment extends Fragment {
     int qnAnswered = 0;
     int qnNumDisplay = qnAnswered+1;
     private static int SELECTED_OPTION;
+    private static int NUMBER_OF_QNS = 5;
 
 
     public QuizFragment() {
@@ -69,6 +70,7 @@ public class QuizFragment extends Fragment {
 
         final int selectedLevel = ((MainActivity)getActivity()).SELECTED_LEVEL-1; //1 = +, 2 = - but -1 here cuz array index
         int counter = 0;
+        questionNumber.setText("Question " + String.valueOf(QuizFragment.this.qnNumDisplay));
         questionTitle.setText(((questionCategories.get(selectedLevel)).get(0)).toString());
         jumbleOptions(((questionCategories.get(selectedLevel)).get(0)));
 
@@ -99,7 +101,7 @@ public class QuizFragment extends Fragment {
                     ((MainActivity)getActivity()).SESSION_SCORE[selectedLevel] += countScore(String.valueOf(q.getAnswer()),
                             QuizFragment.this.options.get(QuizFragment.this.SELECTED_OPTION).getText().toString());
                     // At 3rd question, replace listener for next question with result screen
-                    if (qnAnswered == 2) {
+                    if (qnAnswered == NUMBER_OF_QNS-1) {
                         nextButton.setText("FINISH");
                         nextButton.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -147,7 +149,7 @@ public class QuizFragment extends Fragment {
 
     public void makeQuestions() {
         int xOne, yOne, xTwo, yTwo, xThree, yThree, xFour, yFour;
-        for (int i = 0; i < 3; i ++) {
+        for (int i = 0; i < NUMBER_OF_QNS; i ++) {
 
             xOne = (int)(Math.random() * 10) + 1;
             yOne = (int)(Math.random() * 10) + 1;

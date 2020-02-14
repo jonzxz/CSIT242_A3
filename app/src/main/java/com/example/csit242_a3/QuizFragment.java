@@ -17,8 +17,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Random;
 
-import static com.example.csit242_a3.MainActivity.SELECTED_LEVEL;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,8 +29,8 @@ public class QuizFragment extends Fragment {
     ArrayList<Question> quizFourQns = new ArrayList<>();
     ArrayList<Button> options = new ArrayList<>();
     ArrayList<ArrayList<Question>> questionCategories = new ArrayList<>();
-    int qnAnswered = 0;
-    int qnNumDisplay = qnAnswered+1;
+    int numQnAnswered = 0;
+    int qnNumDisplay = numQnAnswered +1;
     private static int SELECTED_OPTION;
     private static int NUMBER_OF_QNS = 5;
     Random rng = new Random();
@@ -58,6 +56,8 @@ public class QuizFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        // Element initialization
         final TextView questionNumber = (TextView) (getActivity().findViewById(R.id.qnNum));
         final TextView questionTitle = (TextView) (getActivity().findViewById(R.id.qnTitle));
         final Button optionOne = (Button) (getActivity().findViewById(R.id.optionOne));
@@ -65,12 +65,15 @@ public class QuizFragment extends Fragment {
         final Button optionThree = (Button) (getActivity().findViewById(R.id.optionThree));
         final Button nextButton = (Button) (getActivity().findViewById(R.id.nextBtn));
 
+        // -1 due to prevention of OBO since variable is used as index
+        final int selectedLevel = ((MainActivity)getActivity()).SELECTED_LEVEL-1;
+        int counter = 0;
+
+        // Populate ArrayList of Buttons
         options.add(optionOne);
         options.add(optionTwo);
         options.add(optionThree);
 
-        final int selectedLevel = ((MainActivity)getActivity()).SELECTED_LEVEL-1; //1 = +, 2 = - but -1 here cuz array index
-        int counter = 0;
 
         // Initialize first question
         questionNumber.setText("Question " + String.valueOf(QuizFragment.this.qnNumDisplay));
@@ -82,10 +85,9 @@ public class QuizFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     // Increment question number related variable
-                    QuizFragment.this.qnAnswered++;
+                    QuizFragment.this.numQnAnswered++;
                     QuizFragment.this.qnNumDisplay++;
-                    final Question q = (QuizFragment.this.questionCategories.get(selectedLevel)).get(QuizFragment.this.qnAnswered);
-                    //final String selectedOptionValue = QuizFragment.this.options.get(QuizFragment.this.SELECTED_OPTION).getText().toString();
+                    final Question q = (QuizFragment.this.questionCategories.get(selectedLevel)).get(QuizFragment.this.numQnAnswered);
 
                     // Replace displayable elements with next question
                     //Question Number
@@ -95,25 +97,32 @@ public class QuizFragment extends Fragment {
                     questionTitle.setText(q.toString());
 
                     //Options
-                    jumbleOptions(((questionCategories.get(selectedLevel)).get(QuizFragment.this.qnAnswered)));
+                    jumbleOptions(((questionCategories.get(selectedLevel)).get(QuizFragment.this.numQnAnswered)));
 
                     boolean test =checkAnswer(String.valueOf(q.getAnswer()),
                             QuizFragment.this.options.get(QuizFragment.this.SELECTED_OPTION).getText().toString());
 
                     Log.d("CHECK", String.valueOf(test));
+//                    Log.d("ANS", String.valueOf(q.getAnswer()));
+//                    Log.d("SELECTED", String.valueOf(QuizFragment.this.options.get(QuizFragment.this.SELECTED_OPTION).getText().toString()));
                     ((MainActivity)getActivity()).SESSION_SCORE[selectedLevel] += countScore(String.valueOf(q.getAnswer()),
                             QuizFragment.this.options.get(QuizFragment.this.SELECTED_OPTION).getText().toString());
 
                     // At 4th question, replace listener for next question with result screen
-                    if (qnAnswered == NUMBER_OF_QNS-1) {
+                    if (numQnAnswered == NUMBER_OF_QNS-1) {
                         nextButton.setText("FINISH");
                         nextButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                boolean test =checkAnswer(String.valueOf(q.getAnswer()),
-                                        QuizFragment.this.options.get(QuizFragment.this.SELECTED_OPTION).getText().toString());
+
+                                // Point accumulation
                                 ((MainActivity)getActivity()).SESSION_SCORE[selectedLevel] += countScore(String.valueOf(q.getAnswer()),
                                         QuizFragment.this.options.get(QuizFragment.this.SELECTED_OPTION).getText().toString());
+
+                                // Boolean for debugging purpose to see if question is answered correctly
+                                boolean test =checkAnswer(String.valueOf(q.getAnswer()),
+                                        QuizFragment.this.options.get(QuizFragment.this.SELECTED_OPTION).getText().toString());
+                                // Debugging purposes
                                 Log.d("CHECK", String.valueOf(test));
                                 Log.d("Final score", String.valueOf(((MainActivity)getActivity()).SESSION_SCORE[selectedLevel]));
                             }
@@ -125,9 +134,10 @@ public class QuizFragment extends Fragment {
             });
 
             counter++;
-        } while (counter < this.quizOneQns.size());
+        } while (counter < NUMBER_OF_QNS);
 
 
+        // Listener initialization for option buttons
         optionOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -164,7 +174,7 @@ public class QuizFragment extends Fragment {
             } while (xSub <= ySub);
             this.quizTwoQns.add(new Question(xSub, ySub, '-'));
         }
-        
+
         // For Addition Qn 3, 4 / Sub Qn 3, 4
         for (int i = 0; i < 2; i++) {
             this.quizOneQns.add(new Question(generateInt(1, 9), generateInt(10, 99), '+'));
@@ -227,7 +237,7 @@ public class QuizFragment extends Fragment {
         for (Button b: options) {
             b.setText(String.format("%d", (q.getAnswer() + generateInt(1, 15))));
         }
-        int correctButtonIdx = (int)Math.random() *3;
+        int correctButtonIdx = generateInt(0, 2);
         options.get(correctButtonIdx).setText(String.format("%d", (q.getAnswer())));
     }
 

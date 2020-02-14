@@ -32,6 +32,7 @@ public class QuizFragment extends Fragment {
     ArrayList<Question> quizThreeQns = new ArrayList<>();
     ArrayList<Question> quizFourQns = new ArrayList<>();
     ArrayList<Button> options = new ArrayList<>();
+    ArrayList<ArrayList<Question>> questionCategories = new ArrayList<>();
     int qnAnswered = 0;
     int qnNumDisplay = qnAnswered+1;
     private static int SELECTED_OPTION;
@@ -49,6 +50,10 @@ public class QuizFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         makeQuestions();
+        questionCategories.add(quizOneQns);
+        questionCategories.add(quizTwoQns);
+        questionCategories.add(quizThreeQns);
+        questionCategories.add(quizFourQns);
         return inflater.inflate(R.layout.fragment_quiz, container, false);
     }
 
@@ -66,68 +71,116 @@ public class QuizFragment extends Fragment {
         options.add(optionTwo);
         options.add(optionThree);
 
-        switch (((MainActivity)getActivity()).SELECTED_LEVEL) {
-            int counter = 0;
-            case 1:
-                for (Question q: quizOneQns) {
-                    Log.d("QN", q.toStringAnswer());
-                }
-                questionTitle.setText((this.quizOneQns.get(0)).toString());
-                jumbleOptions(QuizFragment.this.quizOneQns.get(0));
-                questionNumber.setText("Question 1");
-                do {
-                    nextButton.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            QuizFragment.this.qnAnswered++;
-                            nextButton.setText("NEXT");
-                            QuizFragment.this.qnNumDisplay++;
-                            questionTitle.setText(QuizFragment.this.quizOneQns.get(QuizFragment.this.qnAnswered).toString());
-                            jumbleOptions(QuizFragment.this.quizOneQns.get(QuizFragment.this.qnAnswered));
-                            questionNumber.setText("Question " + String.valueOf(QuizFragment.this.qnNumDisplay));
+        final int selectedLevel = ((MainActivity)getActivity()).SELECTED_LEVEL-1; //1 = +, 2 = -
+        int counter = 0;
+        questionTitle.setText(((questionCategories.get(selectedLevel)).get(0)).toString());
+        jumbleOptions(((questionCategories.get(selectedLevel)).get(0)));
 
-                            if (String.valueOf(QuizFragment.this.quizOneQns.get(QuizFragment.this.qnAnswered).getAnswer()).equals(QuizFragment.this.options.get(QuizFragment.this.SELECTED_OPTION).getText().toString())) {
-                                Log.d("ANS", "CORRECT!!!");
-                            }
-                            if (qnAnswered == 2) {
-                                nextButton.setText("FINISH");
-                                nextButton.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        Log.d("yay", "YAAAAAAAAAY");
-                                    }
-                                });
+        do {
+            nextButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    QuizFragment.this.qnAnswered++;
+                    nextButton.setText("NEXT");
+                    QuizFragment.this.qnNumDisplay++;
+                    questionTitle.setText((QuizFragment.this.questionCategories.get(selectedLevel)).get(QuizFragment.this.qnAnswered).toString());
+//                    jumbleOptions(QuizFragment.this.quizOneQns.get(QuizFragment.this.qnAnswered));
+                    jumbleOptions(((questionCategories.get(selectedLevel)).get(QuizFragment.this.qnAnswered)));
+                    questionNumber.setText("Question " + String.valueOf(QuizFragment.this.qnNumDisplay));
 
-                            }
-                        }
-
-
-                    });
-
-                    if (counter == 3) {
+//                    if (String.valueOf(QuizFragment.this.quizOneQns.get(QuizFragment.this.qnAnswered).getAnswer()).equals(QuizFragment.this.options.get(QuizFragment.this.SELECTED_OPTION).getText().toString())) {
+//                        Log.d("ANS", "CORRECT!!!");
+//                    }
+                    if (qnAnswered == 2) {
+                        nextButton.setText("FINISH");
                         nextButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
                                 Log.d("yay", "YAAAAAAAAAY");
                             }
                         });
+
                     }
-                    counter++;
-                } while (counter < this.quizOneQns.size());
+                }
 
-                break;
-            case 2:
-                questionTitle.setText(this.quizTwoQns.get(0).toString());
-                break;
-            case 3:
-                questionTitle.setText(this.quizThreeQns.get(0).toString());
-                break;
-            case 4:
-                questionTitle.setText(this.quizFourQns.get(0).toString());
-                jumbleOptions(this.quizFourQns.get(0));
-                break;
 
-        }
+            });
+
+            if (counter == 3) {
+                nextButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.d("yay", "YAAAAAAAAAY");
+                    }
+                });
+            }
+            counter++;
+        } while (counter < this.quizOneQns.size());
+
+
+//
+//        switch (((MainActivity)getActivity()).SELECTED_LEVEL) {
+//            int counter = 0;
+//            case 1:
+//                for (Question q: quizOneQns) {
+//                    Log.d("QN", q.toStringAnswer());
+//                }
+//                questionTitle.setText((this.quizOneQns.get(0)).toString());
+//                jumbleOptions(QuizFragment.this.quizOneQns.get(0));
+//                questionNumber.setText("Question 1");
+//                do {
+//                    nextButton.setOnClickListener(new View.OnClickListener() {
+//                        @Override
+//                        public void onClick(View v) {
+//                            QuizFragment.this.qnAnswered++;
+//                            nextButton.setText("NEXT");
+//                            QuizFragment.this.qnNumDisplay++;
+//                            questionTitle.setText(QuizFragment.this.quizOneQns.get(QuizFragment.this.qnAnswered).toString());
+//                            jumbleOptions(QuizFragment.this.quizOneQns.get(QuizFragment.this.qnAnswered));
+//                            questionNumber.setText("Question " + String.valueOf(QuizFragment.this.qnNumDisplay));
+//
+//                            if (String.valueOf(QuizFragment.this.quizOneQns.get(QuizFragment.this.qnAnswered).getAnswer()).equals(QuizFragment.this.options.get(QuizFragment.this.SELECTED_OPTION).getText().toString())) {
+//                                Log.d("ANS", "CORRECT!!!");
+//                            }
+//                            if (qnAnswered == 2) {
+//                                nextButton.setText("FINISH");
+//                                nextButton.setOnClickListener(new View.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(View v) {
+//                                        Log.d("yay", "YAAAAAAAAAY");
+//                                    }
+//                                });
+//
+//                            }
+//                        }
+//
+//
+//                    });
+//
+//                    if (counter == 3) {
+//                        nextButton.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v) {
+//                                Log.d("yay", "YAAAAAAAAAY");
+//                            }
+//                        });
+//                    }
+//                    counter++;
+//                } while (counter < this.quizOneQns.size());
+//
+//                break;
+//            case 2:
+//                questionTitle.setText(this.quizTwoQns.get(0).toString());
+//                break;
+//            case 3:
+//                questionTitle.setText(this.quizThreeQns.get(0).toString());
+//                break;
+//            case 4:
+//                questionTitle.setText(this.quizFourQns.get(0).toString());
+//                jumbleOptions(this.quizFourQns.get(0));
+//                break;
+//
+//        }
 
         optionOne.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -33,7 +33,7 @@ public class QuizFragment extends Fragment {
     ArrayList<Question> quizFourQns = new ArrayList<>();
     ArrayList<Button> options = new ArrayList<>();
     int qnAnswered = 0;
-    int qnNumDisplay = qnAnswered;
+    int qnNumDisplay = qnAnswered+1;
     private static int SELECTED_OPTION;
     boolean isStart = false;
 
@@ -61,26 +61,26 @@ public class QuizFragment extends Fragment {
         final Button optionTwo = (Button) (getActivity().findViewById(R.id.optionTwo));
         final Button optionThree = (Button) (getActivity().findViewById(R.id.optionThree));
         final Button nextButton = (Button) (getActivity().findViewById(R.id.nextBtn));
-        nextButton.setText("START");
 
         options.add(optionOne);
         options.add(optionTwo);
         options.add(optionThree);
 
         switch (((MainActivity)getActivity()).SELECTED_LEVEL) {
+            int counter = 0;
             case 1:
                 for (Question q: quizOneQns) {
                     Log.d("QN", q.toStringAnswer());
                 }
-                questionTitle.setText("CLICK START");
-//                jumbleOptions(QuizFragment.this.quizOneQns.get(0));
-//                questionNumber.setText("Question 1");
-                nextButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
+                questionTitle.setText((this.quizOneQns.get(0)).toString());
+                jumbleOptions(QuizFragment.this.quizOneQns.get(0));
+                questionNumber.setText("Question 1");
+                do {
+                    nextButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            QuizFragment.this.qnAnswered++;
                             nextButton.setText("NEXT");
-
                             QuizFragment.this.qnNumDisplay++;
                             questionTitle.setText(QuizFragment.this.quizOneQns.get(QuizFragment.this.qnAnswered).toString());
                             jumbleOptions(QuizFragment.this.quizOneQns.get(QuizFragment.this.qnAnswered));
@@ -91,16 +91,29 @@ public class QuizFragment extends Fragment {
                             }
                             if (qnAnswered == 2) {
                                 nextButton.setText("FINISH");
-                                //qnAnswered = 0;
-                                System.exit(0);
-                            } else {
-                                nextButton.setText("NEXT");
+                                nextButton.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        Log.d("yay", "YAAAAAAAAAY");
+                                    }
+                                });
+
                             }
-                            QuizFragment.this.qnAnswered++;
                         }
 
 
-                });
+                    });
+
+                    if (counter == 3) {
+                        nextButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Log.d("yay", "YAAAAAAAAAY");
+                            }
+                        });
+                    }
+                    counter++;
+                } while (counter < this.quizOneQns.size());
 
                 break;
             case 2:

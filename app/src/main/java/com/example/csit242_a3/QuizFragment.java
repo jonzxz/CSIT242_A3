@@ -14,8 +14,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -36,8 +34,6 @@ public class QuizFragment extends Fragment {
     int qnAnswered = 0;
     int qnNumDisplay = qnAnswered+1;
     private static int SELECTED_OPTION;
-    boolean isStart = false;
-
 
 
     public QuizFragment() {
@@ -71,7 +67,7 @@ public class QuizFragment extends Fragment {
         options.add(optionTwo);
         options.add(optionThree);
 
-        final int selectedLevel = ((MainActivity)getActivity()).SELECTED_LEVEL-1; //1 = +, 2 = -
+        final int selectedLevel = ((MainActivity)getActivity()).SELECTED_LEVEL-1; //1 = +, 2 = - but -1 here cuz array index
         int counter = 0;
         questionTitle.setText(((questionCategories.get(selectedLevel)).get(0)).toString());
         jumbleOptions(((questionCategories.get(selectedLevel)).get(0)));
@@ -80,34 +76,43 @@ public class QuizFragment extends Fragment {
             nextButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    // Increment question number related variable
                     QuizFragment.this.qnAnswered++;
-                    nextButton.setText("NEXT");
                     QuizFragment.this.qnNumDisplay++;
-                    questionTitle.setText((QuizFragment.this.questionCategories.get(selectedLevel)).get(QuizFragment.this.qnAnswered).toString());
-//                    jumbleOptions(QuizFragment.this.quizOneQns.get(QuizFragment.this.qnAnswered));
-                    jumbleOptions(((questionCategories.get(selectedLevel)).get(QuizFragment.this.qnAnswered)));
+                    final Question q = (QuizFragment.this.questionCategories.get(selectedLevel)).get(QuizFragment.this.qnAnswered);
+                    //final String selectedOptionValue = QuizFragment.this.options.get(QuizFragment.this.SELECTED_OPTION).getText().toString();
+
+                    // Replace displayable elements with next question
+                    //Question Number
                     questionNumber.setText("Question " + String.valueOf(QuizFragment.this.qnNumDisplay));
-                    boolean test =checkAnswer(String.valueOf((QuizFragment.this.questionCategories.get(selectedLevel)).get(QuizFragment.this.qnAnswered).getAnswer()),
+
+                    //Title
+                    questionTitle.setText(q.toString());
+
+                    //Options
+                    jumbleOptions(((questionCategories.get(selectedLevel)).get(QuizFragment.this.qnAnswered)));
+
+                    boolean test =checkAnswer(String.valueOf(q.getAnswer()),
                             QuizFragment.this.options.get(QuizFragment.this.SELECTED_OPTION).getText().toString());
+
                     Log.d("CHECK", String.valueOf(test));
+                    ((MainActivity)getActivity()).SESSION_SCORE[selectedLevel] += countScore(String.valueOf(q.getAnswer()),
+                            QuizFragment.this.options.get(QuizFragment.this.SELECTED_OPTION).getText().toString());
+                    // At 3rd question, replace listener for next question with result screen
                     if (qnAnswered == 2) {
                         nextButton.setText("FINISH");
                         nextButton.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
-                                boolean test =checkAnswer(String.valueOf((QuizFragment.this.questionCategories.get(selectedLevel)).get(QuizFragment.this.qnAnswered).getAnswer()),
+                                boolean test =checkAnswer(String.valueOf(q.getAnswer()),
                                         QuizFragment.this.options.get(QuizFragment.this.SELECTED_OPTION).getText().toString());
-
-                                Log.d("CHECK", String.valueOf(test));
-                                Log.d("yay", "YAAAAAAAAAY");
+                                ((MainActivity)getActivity()).SESSION_SCORE[selectedLevel] += countScore(String.valueOf(q.getAnswer()),
+                                        QuizFragment.this.options.get(QuizFragment.this.SELECTED_OPTION).getText().toString());
+                                        Log.d("CHECK", String.valueOf(test));
+                                Log.d("Final score", String.valueOf(((MainActivity)getActivity()).SESSION_SCORE[selectedLevel]));
                             }
                         });
                     }
-
-//                    if (String.valueOf((QuizFragment.this.questionCategories.get(selectedLevel)).get(QuizFragment.this.qnAnswered).getAnswer()).equals(QuizFragment.this.options.get(QuizFragment.this.SELECTED_OPTION).getText().toString())) {
-//                        Log.d("ANS", "CORRECT!!!");
-//                    }
-
                 }
 
 
@@ -187,6 +192,10 @@ public class QuizFragment extends Fragment {
 
     private boolean checkAnswer(String a, String b) {
         return a.equals(b);
+    }
+
+    private int countScore(String a, String b) {
+        return (a.equals(b)) ? 1 : 0;
     }
 }
 

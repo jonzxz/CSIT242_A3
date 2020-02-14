@@ -11,6 +11,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static String PLAYER_NAME;
     public static int SELECTED_LEVEL = 0;
+    public static int[] SESSION_SCORE = {0, 0, 0, 0};
     public FragmentManager fragmentManager = getSupportFragmentManager();
 
     @Override

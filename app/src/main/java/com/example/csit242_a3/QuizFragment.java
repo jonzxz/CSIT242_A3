@@ -114,7 +114,7 @@ public class QuizFragment extends Fragment {
                                         QuizFragment.this.options.get(QuizFragment.this.SELECTED_OPTION).getText().toString());
                                 ((MainActivity)getActivity()).SESSION_SCORE[selectedLevel] += countScore(String.valueOf(q.getAnswer()),
                                         QuizFragment.this.options.get(QuizFragment.this.SELECTED_OPTION).getText().toString());
-                                        Log.d("CHECK", String.valueOf(test));
+                                Log.d("CHECK", String.valueOf(test));
                                 Log.d("Final score", String.valueOf(((MainActivity)getActivity()).SESSION_SCORE[selectedLevel]));
                             }
                         });
@@ -151,6 +151,7 @@ public class QuizFragment extends Fragment {
 
     }
 
+    // Function to populate ArrayList of Question for each topic that fulfills assignment appendix
     public void makeQuestions() {
 
         // For Addition Qn 1, 2 / Sub Qn 1, 2
@@ -163,6 +164,7 @@ public class QuizFragment extends Fragment {
             } while (xSub <= ySub);
             this.quizTwoQns.add(new Question(xSub, ySub, '-'));
         }
+        
         // For Addition Qn 3, 4 / Sub Qn 3, 4
         for (int i = 0; i < 2; i++) {
             this.quizOneQns.add(new Question(generateInt(1, 9), generateInt(10, 99), '+'));
@@ -220,36 +222,32 @@ public class QuizFragment extends Fragment {
         this.quizFourQns.add(new Question(xDiv, yDiv, '/'));
     }
 
+    // Populate all Button options with wrong answer, then randomly replace one with correct answer
     private void jumbleOptions(Question q) {
-
         for (Button b: options) {
-
-            if (q.getSymbol() != '/') {
-                b.setText(String.valueOf((q.getAnswer()) + rng.nextInt(15) +1));
-            } else
-                b.setText(String.format("%d", (q.getAnswer()) + rng.nextInt(15) +1));
+            b.setText(String.format("%d", (q.getAnswer() + generateInt(1, 15))));
         }
-
         int correctButtonIdx = (int)Math.random() *3;
-        if (q.getSymbol() != '/') {
-            options.get(correctButtonIdx).setText(String.valueOf((q.getAnswer())));
-        } else
-            options.get(correctButtonIdx).setText(String.format("%d", (q.getAnswer())));
+        options.get(correctButtonIdx).setText(String.format("%d", (q.getAnswer())));
     }
 
 
+    // Returns a bool for question, for debugging purposes
     private boolean checkAnswer(String a, String b) {
         return a.equals(b);
     }
 
+    // Returns score earned for question by checking if values are the same
     private int countScore(String a, String b) {
         return (a.equals(b)) ? 1 : 0;
     }
 
+    // Returns integer of range lBound and uBound, both ends inclusive
     private int generateInt(int lBound, int uBound) {
-        return lBound + (int)(Math.random() * ((uBound - lBound) +1)); // both inclusive
+        return lBound + (int)(Math.random() * ((uBound - lBound) +1));
     }
 
+    // Randomly returns a 2, 3 or 5
     private int getTwoThreeFive() {
         int[] TwoThreeFive = {2, 3, 5};
         int idx = generateInt(0, 2);

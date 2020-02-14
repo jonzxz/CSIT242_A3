@@ -132,8 +132,6 @@ public class QuizFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 QuizFragment.this.SELECTED_OPTION = 0;
-                Log.d("single", String.valueOf(generateInt(1, 9)));
-                Log.d("double", String.valueOf(generateInt(10, 20)));
             }
         });
 
@@ -179,8 +177,8 @@ public class QuizFragment extends Fragment {
         do {
             xSub = generateInt(10, 99);
             ySub = generateInt(10, 99);
-            this.quizTwoQns.add(new Question(xSub, ySub, '-'));
         } while (xSub <= ySub);
+        this.quizTwoQns.add(new Question(xSub, ySub, '-'));
 
         // Multiplication Qn 1
         this.quizThreeQns.add(new Question(generateInt(1, 5), generateInt(1, 5), '*'));
@@ -227,16 +225,16 @@ public class QuizFragment extends Fragment {
         for (Button b: options) {
 
             if (q.getSymbol() != '/') {
-                b.setText(String.valueOf(((int) q.getAnswer()) + rng.nextInt(15) +1) + ".0");
+                b.setText(String.valueOf((q.getAnswer()) + rng.nextInt(15) +1));
             } else
-                b.setText(String.format("%.1f", (q.getAnswer()) + rng.nextInt(15) +1));
+                b.setText(String.format("%d", (q.getAnswer()) + rng.nextInt(15) +1));
         }
 
         int correctButtonIdx = (int)Math.random() *3;
         if (q.getSymbol() != '/') {
-            options.get(correctButtonIdx).setText(String.valueOf(((int) q.getAnswer()) + ".0"));
+            options.get(correctButtonIdx).setText(String.valueOf((q.getAnswer())));
         } else
-            options.get(correctButtonIdx).setText(String.format("%.1f", (q.getAnswer())));
+            options.get(correctButtonIdx).setText(String.format("%d", (q.getAnswer())));
     }
 
 

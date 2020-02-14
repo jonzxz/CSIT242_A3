@@ -4,7 +4,7 @@ public class Question {
 
     private int x;
     private int y;
-    private double answer;
+    private int answer;
     private char symbol;
 
     public Question(int x, int y, char symbol) {
@@ -31,7 +31,7 @@ public class Question {
         return (String.format("%d %c %d", x, symbol, y));
     }
 
-    public double getAnswer() {
+    public int getAnswer() {
         return this.answer;
     }
 
@@ -43,14 +43,11 @@ public class Question {
         } else if (this.symbol == '*') {
             this.answer = x * y;
         } else if (this.symbol == '/') {
-            this.answer = (double)x/y;
+            this.answer = x/y;
         }
     }
 
     public String toStringAnswer() {
-        if (this.symbol == '/') {
-            return (String.format("%d %c %d = %.2f", x, symbol, y, answer));
-        }
-        return (String.format("%d %c %d = %.0f", x, symbol, y, answer));
+        return (String.format("%d %c %d = %d", x, symbol, y, answer));
     }
 }

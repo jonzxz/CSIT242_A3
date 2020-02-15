@@ -84,13 +84,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="53dp"
-        android:layout_marginBottom="37dp"
+        android:layout_marginBottom="24dp"
         android:width="130dp"
         android:height="130dp"
+        android:background="#f7f7f7"
         android:text="×"
         android:textSize="50dp"
-        android:background="#f7f7f7"
-        app:layout_constraintBottom_toTopOf="@+id/viewScore"
+        app:layout_constraintBottom_toTopOf="@+id/viewMyScore"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
@@ -98,65 +98,79 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="52dp"
-        android:layout_marginBottom="37dp"
+        android:layout_marginBottom="24dp"
         android:width="130dp"
         android:height="130dp"
+        android:background="#f7f7f7"
         android:text="÷"
         android:textSize="50dp"
+        app:layout_constraintBottom_toTopOf="@+id/viewRecentScore"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/viewMyScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginBottom="23dp"
         android:background="#f7f7f7"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:text="View My Scores"
         app:layout_constraintBottom_toTopOf="@+id/viewInstruction"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Button
-        android:id="@+id/viewScore"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="67dp"
-        android:layout_marginBottom="19dp"
-        android:text="View Score"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:background="#f7f7f7"
-        app:layout_constraintBottom_toTopOf="@+id/startBtn"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/viewInstruction"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="56dp"
-        android:layout_marginBottom="19dp"
-        android:text="INSTRUCTIONS"
-        android:paddingLeft="15dp"
-        android:paddingRight="15dp"
-        android:background="#f7f7f7"
-        app:layout_constraintBottom_toTopOf="@+id/startBtn"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Button
-        android:id="@+id/startBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="53dp"
-        android:layout_marginBottom="51dp"
-        android:width="200dp"
-        android:background="#5cb85c"
-        android:text="Start"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/quitBtn"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="56dp"
-        android:layout_marginBottom="51dp"
+        android:layout_height="44dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="60dp"
         android:width="50dp"
         android:background="#d9534f"
         android:text="Quit"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/viewInstruction"
+        android:layout_width="118dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginBottom="60dp"
+        android:background="#f7f7f7"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:text="INSTRUCTIONS"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/startBtn"
+        android:layout_width="104dp"
+        android:layout_height="44dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginBottom="60dp"
+        android:width="200dp"
+        android:background="#5cb85c"
+        android:text="Start"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/viewInstruction" />
+
+    <Button
+        android:id="@+id/viewRecentScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="22dp"
+        android:background="#f7f7f7"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:text="View Recent Scores"
+        app:layout_constraintBottom_toTopOf="@+id/quitBtn"
         app:layout_constraintEnd_toEndOf="parent" />
 
 

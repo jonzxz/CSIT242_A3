@@ -76,4 +76,57 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return list;
     }
 
+    public Session getLastScore() {
+        String query = String.format("SELECT * FROM %s ORDER BY %s DESC LIMIT 1", TABLE_SCORE_BOARD, KEY_ID);
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+        Session s = new Session();
+        s.setID(Integer.parseInt(cursor.getString(0)));
+        s.setName(cursor.getString(1));
+        s.setDate(cursor.getString(2));;
+        s.setScore(Integer.parseInt(cursor.getString(3)));
+        return s;
+    }
+
+    public ArrayList<Session> getLastFiveScores() {
+        ArrayList<Session> list = new ArrayList<>();
+        String query = String.format("SELECT * FROM %s ORDER BY %s DESC LIMIT 5", TABLE_SCORE_BOARD, KEY_ID);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Session s = new Session();
+                s.setID(Integer.parseInt(cursor.getString(0)));
+                s.setName(cursor.getString(1));
+                s.setDate(cursor.getString(2));;
+                s.setScore(Integer.parseInt(cursor.getString(3)));
+                list.add(s);
+            } while (cursor.moveToNext());
+        }
+        return list;
+    }
+
+    public ArrayList<Session> getPlayerScores(String playerName) {
+        ArrayList<Session> list = new ArrayList<>();
+        String query = String.format("SELECT * FROM %s WHERE %s='%s'", TABLE_SCORE_BOARD, KEY_NAME, playerName);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Session s = new Session();
+                s.setID(Integer.parseInt(cursor.getString(0)));
+                s.setName(cursor.getString(1));
+                s.setDate(cursor.getString(2));
+                s.setScore(Integer.parseInt(cursor.getString(3)));
+                list.add(s);
+            } while (cursor.moveToNext());
+        }
+        return list;
+    }
+
 }

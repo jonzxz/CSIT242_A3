@@ -18,10 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 // Home Screen Fragment, is initial Fragment to be displayed upon activity start
 
@@ -61,9 +58,11 @@ public class HomeScreenFragment extends Fragment {
         final Button startBtn = (Button) this.getView().findViewById(R.id.startBtn);
         final Button quitBtn = (Button) this.getView().findViewById(R.id.quitBtn);
         final Button instructionBtn = (Button) this.getView().findViewById(R.id.viewInstruction);
-        final Button viewScoreBtn = (Button) this.getView().findViewById(R.id.viewScore);
+        final Button viewMyScoreBtn = (Button) this.getView().findViewById(R.id.viewMyScore);
+        final Button viewRecentBtn = (Button) this.getView().findViewById(R.id.viewRecentScore);
         final TextView currentSessionScore = (TextView) this.getView().findViewById(R.id.currentSessScore);
         final TextView nameLabel = (TextView) (this.getView().findViewById(R.id.helloMsg));
+        final TextView previousSessionScore = (TextView) this.getView().findViewById(R.id.prevSessScore);
 
         // If player name is not set, displays first, otherwise player name will be set and button will be disabled for the session
         if (((MainActivity)getActivity()).PLAYER_NAME == null) {
@@ -75,6 +74,10 @@ public class HomeScreenFragment extends Fragment {
 
         // Displays current session score - required when player comes back to HomeScreen after completing a topic
         currentSessionScore.setText(String.format("Current Session: %s", String.valueOf(((MainActivity) getActivity()).getTotalScore())));
+        Session previousSession = ((MainActivity)getActivity()).dbHelper.getLastScore();
+        previousSessionScore.setText(String.format("Previous Session: %s", String.valueOf(previousSession.getScore())));
+
+
 
         // Populate ArrayList of Buttons for coloring purpose
         quizBtns.add(quizOneBtn);
@@ -112,7 +115,7 @@ public class HomeScreenFragment extends Fragment {
                 deselectQuizes();
                 quizOneBtn.setBackgroundColor(Color.parseColor("#f0ad4e"));
                 ((MainActivity) getActivity()).SELECTED_LEVEL = 1;
-               Log.d("BtnOne", "Level 1 selected!");
+                Log.d("BtnOne", "Level 1 selected!");
             }
 
         });
@@ -202,15 +205,62 @@ public class HomeScreenFragment extends Fragment {
             }
         });
 
-        // View Score Button listener *** SUPPOSED TO PULL LAST N ROWS OF DB****
-        viewScoreBtn.setOnClickListener(new View.OnClickListener() {
+        // View Score Button listener - pulls records where NAME = current player name
+        viewMyScoreBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<Session> list = ((MainActivity)getActivity()).dbHelper.getAllScores();
+                String myScoreString="";
+                ArrayList<Session> list = ((MainActivity)getActivity()).dbHelper.getPlayerScores(((MainActivity)getActivity()).PLAYER_NAME);
                 for (Session s : list) {
-                    String log = String.format("Name: %s, Date: %s, Score: %d", s.getName(), s.getDate(), s.getScore());
-                    Log.d("RECORD", log);
+                    myScoreString += String.format("Session ended on %s, Score: %d\n", s.getDate(), s.getScore());
                 }
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                final TextView myScoreDisplay = new  TextView(getActivity());
+                myScoreDisplay.setText(myScoreString);
+                myScoreDisplay.setPadding(70, 50, 50, 50);
+                myScoreDisplay.setTextSize(14);
+                if ((((MainActivity) getActivity()).PLAYER_NAME != null)) {
+                    builder.setTitle(String.format("%s's sessions", ((MainActivity) getActivity()).PLAYER_NAME))
+                            .setView(myScoreDisplay)
+                            .setPositiveButton("Close", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.dismiss();
+                                }
+                            });
+                    AlertDialog myScoreDialogue = builder.create();
+                    myScoreDialogue.show();
+                } else {
+                    Toast.makeText(getActivity(), "Enter your name first!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        viewRecentBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String lastFiveScoreString="";
+                ArrayList<Session> list = ((MainActivity)getActivity()).dbHelper.getLastFiveScores();
+                for (Session s : list) {
+                    lastFiveScoreString += String.format("Player: %s, Session: %s, Score: %d\n", s.getName(), s.getDate(), s.getScore());
+                }
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                final TextView lastFiveScoreDisplay = new  TextView(getActivity());
+                lastFiveScoreDisplay.setText(lastFiveScoreString);
+                lastFiveScoreDisplay.setPadding(70, 50, 50, 50);
+                lastFiveScoreDisplay.setTextSize(14);
+                builder.setTitle(String.format("Most recent sessions", ((MainActivity)getActivity()).PLAYER_NAME))
+                        .setView(lastFiveScoreDisplay)
+                        .setPositiveButton("Close", new DialogInterface.OnClickListener(){
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                AlertDialog lastFiveDialog = builder.create();
+                lastFiveDialog.show();
             }
         });
 

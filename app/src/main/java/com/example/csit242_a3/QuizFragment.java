@@ -332,6 +332,11 @@ public class QuizFragment extends Fragment {
         }).setNeutralButton("Finish session", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                // Insert into db here NOT IMPLEMENTED
+                Date date = new Date();
+                DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm");
+                ((MainActivity)getActivity()).dbHelper.addScore(new Session(playerName, dateFormat.format(date),currentTotalScore));
+
                 // Creates a toast to inform end of session and display score, resets all scores to 0,
                 // sets player name to null (so that player can set new name)
                 // and returns to HomeScreen

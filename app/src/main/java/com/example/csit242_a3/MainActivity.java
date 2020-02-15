@@ -2,6 +2,7 @@ package com.example.csit242_a3;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+
 import android.os.Bundle;
 
 import java.util.Arrays;
@@ -13,6 +14,7 @@ public class MainActivity extends AppCompatActivity {
     public static int SELECTED_LEVEL = 0;
     public static int[] SESSION_SCORE = {0, 0, 0, 0};
     public FragmentManager fragmentManager = getSupportFragmentManager();
+    public DatabaseHelper dbHelper = new DatabaseHelper(this);
 
 
     @Override

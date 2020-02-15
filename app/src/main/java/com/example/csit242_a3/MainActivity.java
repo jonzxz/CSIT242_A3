@@ -7,6 +7,8 @@ import androidx.fragment.app.FragmentManager;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import java.util.Arrays;
+
 public class MainActivity extends AppCompatActivity {
 
     public static String PLAYER_NAME;
@@ -21,8 +23,11 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager.beginTransaction().replace(R.id.ForFrag, new HomeScreenFragment()).commit();
     }
 
-
     public boolean isNameEmpty() {
         return (this.PLAYER_NAME == null);
+    }
+
+    public int getTotalScore() {
+        return Arrays.stream(this.SESSION_SCORE).sum();
     }
 }

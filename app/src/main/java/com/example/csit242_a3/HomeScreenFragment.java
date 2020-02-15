@@ -52,7 +52,7 @@ public class HomeScreenFragment extends Fragment {
         this.getView().setBackgroundColor(Color.parseColor("#0275d8"));
 
         // Sets listener for "SET NAME" button to create AlertDialog to key in player name
-        Button setName = (Button) this.getView().findViewById(R.id.setNameBtn);
+        final Button setName = (Button) this.getView().findViewById(R.id.setNameBtn);
         final Button quizOneBtn = (Button) this.getView().findViewById(R.id.quizOne);
         final Button quizTwoBtn = (Button) this.getView().findViewById(R.id.quizTwo);
         final Button quizThreeBtn = (Button) this.getView().findViewById(R.id.quizThree);
@@ -61,6 +61,16 @@ public class HomeScreenFragment extends Fragment {
         final Button quitBtn = (Button) this.getView().findViewById(R.id.quitBtn);
         final Button instructionBtn = (Button) this.getView().findViewById(R.id.viewInstruction);
         final Button viewScoreBtn = (Button) this.getView().findViewById(R.id.viewScore);
+        final TextView currentSessionScore = (TextView) this.getView().findViewById(R.id.currentSessScore);
+
+        final TextView nameLabel = (TextView) (this.getView().findViewById(R.id.helloMsg));
+        if (((MainActivity)getActivity()).PLAYER_NAME == null) {
+            nameLabel.setText(String.format("Hello! Please set a name!"));
+        } else {
+            nameLabel.setText(String.format("Hello %s!", ((MainActivity)getActivity()).PLAYER_NAME));
+            setName.setEnabled(false);
+        }
+        currentSessionScore.setText(String.format("Current Session: %s", String.valueOf(((MainActivity) getActivity()).getTotalScore())));
 
         quizBtns.add(quizOneBtn);
         quizBtns.add(quizTwoBtn);
@@ -80,8 +90,8 @@ public class HomeScreenFragment extends Fragment {
                                 String input = nameInput.getText().toString();
                                 TextView nameLabel = getActivity().findViewById(R.id.helloMsg);
                                 nameLabel.setText(String.format("Hello %s!", input));
-//                                HomeScreenFragment.this.PLAYER_NAME = input;
                                 ((MainActivity)getActivity()).PLAYER_NAME = input;
+                                setName.setEnabled(false);
                             }
                         });
                 AlertDialog setNamePrompt = DialogBuilder.create();
@@ -96,8 +106,7 @@ public class HomeScreenFragment extends Fragment {
                 deselectQuizes();
                 quizOneBtn.setBackgroundColor(Color.parseColor("#f0ad4e"));
                 ((MainActivity) getActivity()).SELECTED_LEVEL = 1;
-//                HomeScreenFragment.this.SELECTED_LEVEL = 1;
-                Log.d("BtnOne", "Level 1 selected!");
+               Log.d("BtnOne", "Level 1 selected!");
             }
 
         });
@@ -108,7 +117,6 @@ public class HomeScreenFragment extends Fragment {
                 deselectQuizes();
                 quizTwoBtn.setBackgroundColor(Color.parseColor("#f0ad4e"));
                 ((MainActivity) getActivity()).SELECTED_LEVEL = 2;
-//                HomeScreenFragment.this.SELECTED_LEVEL = 2;
                 Log.d("BtnTwo", "Level 2 selected!");
             }
         });
@@ -119,7 +127,6 @@ public class HomeScreenFragment extends Fragment {
                 deselectQuizes();
                 quizThreeBtn.setBackgroundColor(Color.parseColor("#f0ad4e"));
                 ((MainActivity) getActivity()).SELECTED_LEVEL = 3;
-//                HomeScreenFragment.this.SELECTED_LEVEL = 3;
                 Log.d("BtnThree", "Level 3 selected!");
             }
         });
@@ -130,7 +137,7 @@ public class HomeScreenFragment extends Fragment {
                 deselectQuizes();
                 quizFourBtn.setBackgroundColor(Color.parseColor("#f0ad4e"));
                 ((MainActivity) getActivity()).SELECTED_LEVEL = 4;
-//                HomeScreenFragment.this.SELECTED_LEVEL = 4;
+
                 Log.d("BtnFour", "Level 4 selected!");
             }
         });
@@ -200,9 +207,7 @@ public class HomeScreenFragment extends Fragment {
 
     }
 
-    private int getSelectedLevel() {
-        return ((MainActivity)getActivity()).SELECTED_LEVEL;
-    }
+
 
 
 }

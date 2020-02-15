@@ -1,6 +1,8 @@
 package com.example.csit242_a3;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -74,6 +76,9 @@ public class QuizFragment extends Fragment {
         options.add(optionTwo);
         options.add(optionThree);
 
+        // Reset score of currently selected level to 0
+        ((MainActivity) getActivity()).SESSION_SCORE[selectedLevel] = 0;
+
 
         // Initialize first question
         questionNumber.setText("Question " + String.valueOf(QuizFragment.this.qnNumDisplay));
@@ -81,23 +86,25 @@ public class QuizFragment extends Fragment {
         jumbleOptions(((questionCategories.get(selectedLevel)).get(0)));
 
         do {
-
             nextButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    //Instantiate Question object for each Question
                     final Question q = (QuizFragment.this.questionCategories.get(selectedLevel)).get(QuizFragment.this.numQnAnswered);
 
+                    // Checks if selected answer is equals to Question's answer
                     boolean test =checkAnswer(String.valueOf(q.getAnswer()),
                             QuizFragment.this.options.get(QuizFragment.this.SELECTED_OPTION).getText().toString());
 
+                    // Debugging line to see if answer is correct
                     Log.d("CHECK", String.valueOf(test));
-//                    Log.d("ANS", String.valueOf(q.getAnswer()));
-//                    Log.d("SELECTED", String.valueOf(QuizFragment.this.options.get(QuizFragment.this.SELECTED_OPTION).getText().toString()));
 
+                    // Point accumulation
                     if (test) {
                         ((MainActivity) getActivity()).SESSION_SCORE[selectedLevel] += 1;
                     }
+
+                    // Setup for next question
                     QuizFragment.this.numQnAnswered++;
                     QuizFragment.this.qnNumDisplay++;
                     if (numQnAnswered != 0) {
@@ -107,6 +114,7 @@ public class QuizFragment extends Fragment {
                     }
 
                     // At 4th question, replace listener for next question with result screen
+                    // There is probably a better way to implement but this will do for now
                     if (numQnAnswered == NUMBER_OF_QNS-1) {
                         nextButton.setText("FINISH");
                         nextButton.setOnClickListener(new View.OnClickListener() {
@@ -114,7 +122,7 @@ public class QuizFragment extends Fragment {
                             public void onClick(View v) {
 
                                 // Boolean for debugging purpose to see if question is answered correctly
-                                boolean test = checkAnswer(String.valueOf(questionCategories.get(selectedLevel).get(questionCategories.get(selectedLevel).size() -1).getAnswer()),
+                                boolean test = checkAnswer(String.valueOf((questionCategories.get(selectedLevel)).get(numQnAnswered).getAnswer()),
                                         QuizFragment.this.options.get(QuizFragment.this.SELECTED_OPTION).getText().toString());
 
                                 if (test) {
@@ -123,6 +131,9 @@ public class QuizFragment extends Fragment {
                                 // Debugging purposes
                                 Log.d("CHECK", String.valueOf(test));
                                 Log.d("Final score", String.valueOf(((MainActivity)getActivity()).SESSION_SCORE[selectedLevel]));
+
+                                // Displays result dialog
+                                getResultDialog().show();
                             }
                         });
                     }
@@ -245,10 +256,6 @@ public class QuizFragment extends Fragment {
         return a.equals(b);
     }
 
-    // Returns score earned for question by checking if values are the same
-    private int countScore(String a, String b) {
-        return (a.equals(b)) ? 1 : 0;
-    }
 
     // Returns integer of range lBound and uBound, both ends inclusive
     private int generateInt(int lBound, int uBound) {
@@ -260,6 +267,32 @@ public class QuizFragment extends Fragment {
         int[] TwoThreeFive = {2, 3, 5};
         int idx = generateInt(0, 2);
         return TwoThreeFive[idx];
+    }
+
+    private AlertDialog getResultDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final TextView results = new TextView(getActivity());
+        results.setText(String.format("Score for this quiz: %d\nYour total score so far: %d",
+                ((MainActivity)getActivity()).SESSION_SCORE[((MainActivity)getActivity()).SELECTED_LEVEL-1],
+                ((MainActivity)getActivity()).getTotalScore()));
+        results.setPadding(70, 50, 50, 50);
+        builder.setView(results)
+                .setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ((MainActivity) getActivity()).fragmentManager.beginTransaction().replace(R.id.ForFrag, new QuizFragment()).commit();
+                ((MainActivity) getActivity()).SESSION_SCORE[((MainActivity)getActivity()).SELECTED_LEVEL-1] = 0;
+
+            }
+        }).setNeutralButton("Attempt another quiz", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Log.d("clicked", "HOME");
+                ((MainActivity) getActivity()).fragmentManager.beginTransaction().replace(R.id.ForFrag, new HomeScreenFragment()).commit();
+            }
+        }).setCancelable(false);
+        AlertDialog resultDialog = builder.create();
+        return resultDialog;
     }
 }
 

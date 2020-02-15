@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.csit242_a3.Session;
 
+import java.util.ArrayList;
+
 public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 1;
@@ -24,7 +26,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_SCOREBOARD_TABLE = String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY, %s TEXT, %s TEXT, %s TEXT", TABLE_SCORE_BOARD, KEY_ID, KEY_NAME, KEY_DATE, KEY_SCORE);
+        String CREATE_SCOREBOARD_TABLE = String.format("CREATE TABLE %s (%s INTEGER PRIMARY KEY, %s TEXT, %s TEXT, %s TEXT)", TABLE_SCORE_BOARD, KEY_ID, KEY_NAME, KEY_DATE, KEY_SCORE);
         db.execSQL(CREATE_SCOREBOARD_TABLE);
     }
 
@@ -52,6 +54,26 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (cursor != null) cursor.moveToFirst();
         Session s = new Session(Integer.parseInt(cursor.getString(0)), cursor.getString(1), cursor.getString(2), Integer.parseInt(cursor.getString(3)));
         return s;
+    }
+
+    public ArrayList<Session> getAllScores() {
+        ArrayList<Session> list = new ArrayList<>();
+        String query = String.format("SELECT * FROM %s", TABLE_SCORE_BOARD);
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Session s = new Session();
+                s.setID(Integer.parseInt(cursor.getString(0)));
+                s.setName(cursor.getString(1));
+                s.setDate(cursor.getString(2));;
+                s.setScore(Integer.parseInt(cursor.getString(3)));
+                list.add(s);
+            } while (cursor.moveToNext());
+        }
+        return list;
     }
 
 }

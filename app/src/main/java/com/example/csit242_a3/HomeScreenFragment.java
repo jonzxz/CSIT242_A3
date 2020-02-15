@@ -206,7 +206,11 @@ public class HomeScreenFragment extends Fragment {
         viewScoreBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                ArrayList<Session> list = ((MainActivity)getActivity()).dbHelper.getAllScores();
+                for (Session s : list) {
+                    String log = String.format("Name: %s, Date: %s, Score: %d", s.getName(), s.getDate(), s.getScore());
+                    Log.d("RECORD", log);
+                }
             }
         });
 

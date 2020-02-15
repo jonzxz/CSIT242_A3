@@ -7,6 +7,10 @@ public class Session {
     private String name;
     private int score;
 
+    public Session() {
+
+    }
+
     public Session(int id, String name, String date, int score) {
         this.id = id;
         this.name = name;
@@ -20,6 +24,9 @@ public class Session {
         this.score = score;
     }
 
+    public void setID(int id) {
+        this.id = id;
+    }
 
     public void setName(String name) {
         this.name = name;
@@ -44,5 +51,9 @@ public class Session {
 
     public int getScore() {
         return this.score;
+    }
+
+    public int getID() {
+        return this.id;
     }
 }

@@ -3,6 +3,7 @@ package com.example.csit242_a3;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -89,6 +90,9 @@ public class QuizFragment extends Fragment {
             nextButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    // Each Question actions
+                    deselectOptions();
                     //Instantiate Question object for each Question
                     final Question q = (QuizFragment.this.questionCategories.get(selectedLevel)).get(QuizFragment.this.numQnAnswered);
 
@@ -121,7 +125,7 @@ public class QuizFragment extends Fragment {
                             @Override
                             public void onClick(View v) {
 
-                                // Boolean for debugging purpose to see if question is answered correctly
+                                // Checks if selected answer is equals to Question's answer
                                 boolean test = checkAnswer(String.valueOf((questionCategories.get(selectedLevel)).get(numQnAnswered).getAnswer()),
                                         QuizFragment.this.options.get(QuizFragment.this.SELECTED_OPTION).getText().toString());
 
@@ -150,6 +154,8 @@ public class QuizFragment extends Fragment {
         optionOne.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                deselectOptions();
+                optionOne.setBackgroundColor(Color.parseColor("#5cb85c"));
                 QuizFragment.this.SELECTED_OPTION = 0;
             }
         });
@@ -157,6 +163,8 @@ public class QuizFragment extends Fragment {
         optionTwo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                deselectOptions();
+                optionTwo.setBackgroundColor(Color.parseColor("#5cb85c"));
                 QuizFragment.this.SELECTED_OPTION = 1;
             }
         });
@@ -164,6 +172,8 @@ public class QuizFragment extends Fragment {
         optionThree.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                deselectOptions();
+                optionThree.setBackgroundColor(Color.parseColor("#5cb85c"));
                 QuizFragment.this.SELECTED_OPTION = 2;
             }
         });
@@ -269,6 +279,12 @@ public class QuizFragment extends Fragment {
         return TwoThreeFive[idx];
     }
 
+
+    private void deselectOptions() {
+        for (Button b : options) {
+            b.setBackgroundColor(Color.parseColor("#f7f7f7"));
+        }
+    }
     private AlertDialog getResultDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         final TextView results = new TextView(getActivity());

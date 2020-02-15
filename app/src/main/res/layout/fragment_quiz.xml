@@ -45,6 +45,7 @@
         android:layout_height="75dp"
         android:layout_marginBottom="48dp"
         android:text="optOne"
+        android:background="#f7f7f7"
         app:layout_constraintBottom_toTopOf="@+id/optionTwo"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -54,6 +55,7 @@
         android:layout_height="75dp"
         android:layout_marginBottom="51dp"
         android:text="optTwo"
+        android:background="#f7f7f7"
         app:layout_constraintBottom_toTopOf="@+id/optionThree"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -63,6 +65,7 @@
         android:layout_height="75dp"
         android:layout_marginBottom="47dp"
         android:text="optThree"
+        android:background="#f7f7f7"
         app:layout_constraintBottom_toTopOf="@+id/nextBtn"
         app:layout_constraintEnd_toEndOf="parent" />
 

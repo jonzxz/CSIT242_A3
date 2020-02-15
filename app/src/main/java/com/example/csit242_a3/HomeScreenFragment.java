@@ -206,6 +206,7 @@ public class HomeScreenFragment extends Fragment {
         });
 
         // View Score Button listener - pulls records where NAME = current player name
+        // If name is not set, then a TOAST will appear to ask to set name
         viewMyScoreBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -237,6 +238,7 @@ public class HomeScreenFragment extends Fragment {
             }
         });
 
+        // View Recent Button listener - pulls latest 5 records from db and display
         viewRecentBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -263,15 +265,12 @@ public class HomeScreenFragment extends Fragment {
                 lastFiveDialog.show();
             }
         });
-
     }
-
 
     public void deselectQuizes() {
         for (Button b : quizBtns) {
             b.setBackgroundColor(Color.parseColor("#f7f7f7"));
         }
-
     }
 
 }

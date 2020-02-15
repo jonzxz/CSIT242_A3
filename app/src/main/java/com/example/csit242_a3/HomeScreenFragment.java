@@ -174,8 +174,12 @@ public class HomeScreenFragment extends Fragment {
                         "Select the type of quiz you wish to attempt\n" +
                         "Level 1: Addition\nLevel 2: Subtraction\nLevel 3: Multiplication\n" +
                         "Level 4: Division\n\n" +
-                        "Click START to begin!");
+                        "Points are calculated based on (Level) * Number of correct answers\n\n" +
+                        "Click START to begin!\n\n\n" +
+                        "Do note that only the latest attempt for each quiz will be counted into your score\n\n" +
+                        "e.g. If you scored 4 on Addition, retried and scored 2, only 2 points will be counted!");
                 instructionText.setPadding(70, 50, 50, 50);
+                instructionText.setTextSize(16);
                 DialogBuilder.setView(instructionText)
                         .setTitle("Instructions").setPositiveButton("Close", new DialogInterface.OnClickListener() {
                     @Override

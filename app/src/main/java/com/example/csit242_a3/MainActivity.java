@@ -3,6 +3,7 @@ package com.example.csit242_a3;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import android.os.Bundle;
+import android.util.Log;
 
 import java.util.Arrays;
 
@@ -18,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         fragmentManager.beginTransaction().replace(R.id.ForFrag, new HomeScreenFragment()).commit();
+
     }
 
     public boolean isNameEmpty() {
@@ -25,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public int getTotalScore() {
-        return Arrays.stream(this.SESSION_SCORE).sum();
+        return Arrays.stream(SESSION_SCORE).sum();
     }
+
 }

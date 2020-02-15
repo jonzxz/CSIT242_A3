@@ -34,6 +34,7 @@ public class QuizFragment extends Fragment {
     ArrayList<ArrayList<Question>> questionCategories = new ArrayList<>();
     int numQnAnswered = 0;
     int qnNumDisplay = numQnAnswered +1;
+    int numCorrect = 0;
     private static int SELECTED_OPTION;
     private static int NUMBER_OF_QNS = 5;
     Random rng = new Random();
@@ -70,6 +71,7 @@ public class QuizFragment extends Fragment {
 
         // -1 due to prevention of OBO since variable is used as index
         final int selectedLevel = ((MainActivity)getActivity()).SELECTED_LEVEL-1;
+        numCorrect = 0;
         int counter = 0;
 
         // Populate ArrayList of Buttons
@@ -106,6 +108,7 @@ public class QuizFragment extends Fragment {
                     // Point accumulation
                     if (test) {
                         ((MainActivity) getActivity()).SESSION_SCORE[selectedLevel] += 1;
+                        numCorrect++;
                     }
 
                     // Setup for next question
@@ -131,19 +134,18 @@ public class QuizFragment extends Fragment {
 
                                 if (test) {
                                     ((MainActivity)getActivity()).SESSION_SCORE[selectedLevel] += 1;
+                                    numCorrect++;
                                 }
                                 // Debugging purposes
                                 Log.d("CHECK", String.valueOf(test));
                                 Log.d("Final score", String.valueOf(((MainActivity)getActivity()).SESSION_SCORE[selectedLevel]));
-
+                                ((MainActivity)getActivity()).SESSION_SCORE[selectedLevel] = numCorrect * (selectedLevel+1);
                                 // Displays result dialog
                                 getResultDialog().show();
                             }
                         });
                     }
                 }
-
-
             });
 
             counter++;
@@ -287,12 +289,18 @@ public class QuizFragment extends Fragment {
     }
     private AlertDialog getResultDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        String playerName = ((MainActivity)getActivity()).PLAYER_NAME;
+        int numCurrentQuizWrong = this.NUMBER_OF_QNS - this.numCorrect;
+        int multipliedScore = this.numCorrect * ((MainActivity)getActivity()).SELECTED_LEVEL;
+        int currentTotalScore = ((MainActivity)getActivity()).getTotalScore();
         final TextView results = new TextView(getActivity());
-        results.setText(String.format("Score for this quiz: %d\nYour total score so far: %d",
-                ((MainActivity)getActivity()).SESSION_SCORE[((MainActivity)getActivity()).SELECTED_LEVEL-1],
-                ((MainActivity)getActivity()).getTotalScore()));
+        results.setText(String.format("Well done %s, you have %d correct and %d incorrect answers or %d points for this topic\n" +
+                "Overall in this session, you have %d points", playerName, this.numCorrect, numCurrentQuizWrong, multipliedScore, currentTotalScore));
+        results.setTextSize(20);
         results.setPadding(70, 50, 50, 50);
         builder.setView(results)
+                .setCancelable(false)
+                .setTitle("Quiz Complete!")
                 .setPositiveButton("Retry", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -306,7 +314,7 @@ public class QuizFragment extends Fragment {
                 Log.d("clicked", "HOME");
                 ((MainActivity) getActivity()).fragmentManager.beginTransaction().replace(R.id.ForFrag, new HomeScreenFragment()).commit();
             }
-        }).setCancelable(false);
+        });
         AlertDialog resultDialog = builder.create();
         return resultDialog;
     }

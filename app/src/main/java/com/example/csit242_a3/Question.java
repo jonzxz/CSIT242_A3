@@ -42,9 +42,9 @@ public class Question {
             this.answer = x + y;
         } else if (this.symbol == '-') {
             this.answer = x - y;
-        } else if (this.symbol == '*') {
+        } else if (this.symbol == '×') {
             this.answer = x * y;
-        } else if (this.symbol == '/') {
+        } else if (this.symbol == '÷') {
             this.answer = x/y;
         }
     }

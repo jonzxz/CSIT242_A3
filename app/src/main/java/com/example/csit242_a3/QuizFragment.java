@@ -1,7 +1,5 @@
 package com.example.csit242_a3;
 
-
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -22,7 +20,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Random;
 
 
 // Quiz Fragment, displays Questions (based on level)
@@ -224,15 +221,15 @@ public class QuizFragment extends Fragment {
         this.quizTwoQns.add(new Question(xSub, ySub, '-'));
 
         // Multiplication Qn 1
-        this.quizThreeQns.add(new Question(generateInt(1, 5), generateInt(1, 5), '*'));
+        this.quizThreeQns.add(new Question(generateInt(1, 5), generateInt(1, 5), '×'));
         // Multiplication Qn 2
-        this.quizThreeQns.add(new Question(generateInt(6, 9), generateInt(1, 5), '*'));
+        this.quizThreeQns.add(new Question(generateInt(6, 9), generateInt(1, 5), '×'));
         // Multiplication Qn 3
-        this.quizThreeQns.add(new Question(generateInt(1, 5), generateInt(6, 9), '*'));
+        this.quizThreeQns.add(new Question(generateInt(1, 5), generateInt(6, 9), '×'));
         // Multiplication Qn 4
-        this.quizThreeQns.add(new Question(generateInt(6, 9), generateInt(6, 9), '*'));
+        this.quizThreeQns.add(new Question(generateInt(6, 9), generateInt(6, 9), '×'));
         // Multiplication Qn 5
-        this.quizThreeQns.add(new Question(generateInt(10, 20), generateInt(1, 9), '*'));
+        this.quizThreeQns.add(new Question(generateInt(10, 20), generateInt(1, 9), '×'));
 
         // Division Qn 1, 2
         for (int i = 0; i < 2; i ++) {
@@ -241,7 +238,7 @@ public class QuizFragment extends Fragment {
                 xDiv = generateInt(4, 9);
                 yDiv = generateInt(2, 3);
             } while (xDiv % yDiv != 0);
-            this.quizFourQns.add(new Question(xDiv, yDiv, '/'));
+            this.quizFourQns.add(new Question(xDiv, yDiv, '÷'));
         }
 
         // Division Qn 3, 4
@@ -251,7 +248,7 @@ public class QuizFragment extends Fragment {
                 xDiv = generateInt(10, 20);
                 yDiv = getTwoThreeFive();
             } while (xDiv % yDiv != 0);
-            this.quizFourQns.add(new Question(xDiv, yDiv, '/'));
+            this.quizFourQns.add(new Question(xDiv, yDiv, '÷'));
         }
 
         // Division Qn 5
@@ -260,7 +257,7 @@ public class QuizFragment extends Fragment {
             xDiv = generateInt(22, 30);
             yDiv = getTwoThreeFive();
         } while (xDiv % yDiv != 0);
-        this.quizFourQns.add(new Question(xDiv, yDiv, '/'));
+        this.quizFourQns.add(new Question(xDiv, yDiv, '÷'));
     }
 
     // Populate all Button options with wrong answer, then randomly replace one with correct answer
@@ -340,7 +337,7 @@ public class QuizFragment extends Fragment {
                 // Creates a toast to inform end of session and display score, resets all scores to 0,
                 // sets player name to null (so that player can set new name)
                 // and returns to HomeScreen
-                String endSessionMessage = String.format("Well done %s, in this session you had %d points", playerName, currentTotalScore);
+                String endSessionMessage = String.format("Well done %s, in this session you earned %d points", playerName, currentTotalScore);
                 Toast.makeText(getActivity(), endSessionMessage, Toast.LENGTH_LONG).show();
                 ((MainActivity)getActivity()).resetAllScore();
                 ((MainActivity)getActivity()).PLAYER_NAME = null;

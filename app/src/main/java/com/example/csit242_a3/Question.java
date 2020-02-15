@@ -1,5 +1,6 @@
 package com.example.csit242_a3;
 
+// Question class for Quiz
 public class Question {
 
     private int x;
@@ -15,6 +16,7 @@ public class Question {
     }
 
 
+    // Getter / Setters
     public char getSymbol() {
         return this.symbol;
     }
@@ -47,6 +49,7 @@ public class Question {
         }
     }
 
+    // For debugging purpose because I might have terrible math
     public String toStringAnswer() {
         return (String.format("%d %c %d = %d", x, symbol, y, answer));
     }

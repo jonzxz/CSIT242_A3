@@ -5,11 +5,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,28 +12,33 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import java.util.ArrayList;
 import java.util.Random;
 
 
+// Quiz Fragment, displays Questions (based on level)
 /**
  * A simple {@link Fragment} subclass.
  */
 public class QuizFragment extends Fragment {
 
+    // Variable Declaration
+    private static int SELECTED_OPTION; // Selected Button index
+    private static int NUMBER_OF_QNS = 5; // Number of questions, also can be either ArrayList<Question>'s size()
     ArrayList<Question> quizOneQns = new ArrayList<>();
     ArrayList<Question> quizTwoQns = new ArrayList<>();
     ArrayList<Question> quizThreeQns = new ArrayList<>();
     ArrayList<Question> quizFourQns = new ArrayList<>();
     ArrayList<Button> options = new ArrayList<>();
+    // Nested ArrayList of ArrayList<Question> so it is easier to pick up which Quiz topic is selected
     ArrayList<ArrayList<Question>> questionCategories = new ArrayList<>();
     int numQnAnswered = 0;
     int qnNumDisplay = numQnAnswered +1;
     int numCorrect = 0;
-    private static int SELECTED_OPTION;
-    private static int NUMBER_OF_QNS = 5;
-    Random rng = new Random();
-
 
     public QuizFragment() {
         // Required empty public constructor
@@ -49,6 +49,8 @@ public class QuizFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
+        // Initialization of questions and ArrayList of ArrayList<Questions>
         makeQuestions();
         questionCategories.add(quizOneQns);
         questionCategories.add(quizTwoQns);
@@ -71,6 +73,8 @@ public class QuizFragment extends Fragment {
 
         // -1 due to prevention of OBO since variable is used as index
         final int selectedLevel = ((MainActivity)getActivity()).SELECTED_LEVEL-1;
+
+        // Resets numCorrect to 0, just in case y'know
         numCorrect = 0;
         int counter = 0;
 
@@ -139,6 +143,8 @@ public class QuizFragment extends Fragment {
                                 // Debugging purposes
                                 Log.d("CHECK", String.valueOf(test));
                                 Log.d("Final score", String.valueOf(((MainActivity)getActivity()).SESSION_SCORE[selectedLevel]));
+
+                                // Point accumulation and tabulation
                                 ((MainActivity)getActivity()).SESSION_SCORE[selectedLevel] = numCorrect * (selectedLevel+1);
                                 // Displays result dialog
                                 getResultDialog().show();
@@ -147,7 +153,6 @@ public class QuizFragment extends Fragment {
                     }
                 }
             });
-
             counter++;
         } while (counter < NUMBER_OF_QNS);
 
@@ -262,12 +267,10 @@ public class QuizFragment extends Fragment {
         options.get(correctButtonIdx).setText(String.format("%d", (q.getAnswer())));
     }
 
-
     // Returns a bool for question, for debugging purposes
     private boolean checkAnswer(String a, String b) {
         return a.equals(b);
     }
-
 
     // Returns integer of range lBound and uBound, both ends inclusive
     private int generateInt(int lBound, int uBound) {
@@ -281,12 +284,14 @@ public class QuizFragment extends Fragment {
         return TwoThreeFive[idx];
     }
 
-
+    // Decolorize all buttons when moving to next question
     private void deselectOptions() {
         for (Button b : options) {
             b.setBackgroundColor(Color.parseColor("#f7f7f7"));
         }
     }
+
+    // Function to return result dialog to be shown
     private AlertDialog getResultDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         String playerName = ((MainActivity)getActivity()).PLAYER_NAME;
@@ -294,23 +299,28 @@ public class QuizFragment extends Fragment {
         int multipliedScore = this.numCorrect * ((MainActivity)getActivity()).SELECTED_LEVEL;
         int currentTotalScore = ((MainActivity)getActivity()).getTotalScore();
         final TextView results = new TextView(getActivity());
-        results.setText(String.format("Well done %s, you have %d correct and %d incorrect answers or %d points for this topic\n" +
-                "Overall in this session, you have %d points", playerName, this.numCorrect, numCurrentQuizWrong, multipliedScore, currentTotalScore));
+
+        // Text content
         results.setTextSize(20);
         results.setPadding(70, 50, 50, 50);
+        results.setText(String.format("Well done %s, you have %d correct and %d incorrect answers or %d points for this topic\n" +
+                "Overall in this session, you have %d points", playerName, this.numCorrect, numCurrentQuizWrong, multipliedScore, currentTotalScore));
+
+        // Builder contents
         builder.setView(results)
                 .setCancelable(false)
                 .setTitle("Quiz Complete!")
                 .setPositiveButton("Retry", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                // Creates another QuizFragment, repeating current level and resets current level score to 0
                 ((MainActivity) getActivity()).fragmentManager.beginTransaction().replace(R.id.ForFrag, new QuizFragment()).commit();
                 ((MainActivity) getActivity()).SESSION_SCORE[((MainActivity)getActivity()).SELECTED_LEVEL-1] = 0;
-
             }
         }).setNeutralButton("Attempt another quiz", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                // Returns to HomeScreen
                 Log.d("clicked", "HOME");
                 ((MainActivity) getActivity()).fragmentManager.beginTransaction().replace(R.id.ForFrag, new HomeScreenFragment()).commit();
             }

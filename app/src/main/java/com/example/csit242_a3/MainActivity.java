@@ -3,7 +3,6 @@ package com.example.csit242_a3;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 import android.os.Bundle;
-import android.util.Log;
 
 import java.util.Arrays;
 

@@ -5,11 +5,6 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,18 +14,19 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import java.util.ArrayList;
 
-import static com.example.csit242_a3.MainActivity.PLAYER_NAME;
-
+// Home Screen Fragment, is initial Fragment to be displayed upon activity start
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class HomeScreenFragment extends Fragment {
 
-    //    public static String PLAYER_NAME = "";
-//    public static int SELECTED_LEVEL = 0;
     public ArrayList<Button> quizBtns = new ArrayList<>();
 
     public HomeScreenFragment() {
@@ -49,6 +45,8 @@ public class HomeScreenFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        //Set background color
         this.getView().setBackgroundColor(Color.parseColor("#0275d8"));
 
         // Sets listener for "SET NAME" button to create AlertDialog to key in player name
@@ -62,21 +60,25 @@ public class HomeScreenFragment extends Fragment {
         final Button instructionBtn = (Button) this.getView().findViewById(R.id.viewInstruction);
         final Button viewScoreBtn = (Button) this.getView().findViewById(R.id.viewScore);
         final TextView currentSessionScore = (TextView) this.getView().findViewById(R.id.currentSessScore);
-
         final TextView nameLabel = (TextView) (this.getView().findViewById(R.id.helloMsg));
+
+        // If player name is not set, displays first, otherwise player name will be set and button will be disabled for the session
         if (((MainActivity)getActivity()).PLAYER_NAME == null) {
             nameLabel.setText(String.format("Hello! Please set a name!"));
         } else {
             nameLabel.setText(String.format("Hello %s!", ((MainActivity)getActivity()).PLAYER_NAME));
             setName.setEnabled(false);
         }
+        // Displays current session score - required when player comes back to HomeScreen after completing a topic
         currentSessionScore.setText(String.format("Current Session: %s", String.valueOf(((MainActivity) getActivity()).getTotalScore())));
 
+        // Populate ArrayList of Buttons for coloring purpose
         quizBtns.add(quizOneBtn);
         quizBtns.add(quizTwoBtn);
         quizBtns.add(quizThreeBtn);
         quizBtns.add(quizFourBtn);
 
+        // SetNameButton listener
         setName.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,10 +98,10 @@ public class HomeScreenFragment extends Fragment {
                         });
                 AlertDialog setNamePrompt = DialogBuilder.create();
                 setNamePrompt.show();
-
             }
         });
 
+        // Quiz button listeners, colorize selected quiz type and set Activity's SELECTED_LEVEL to be caught in QuizFragment
         quizOneBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -142,6 +144,7 @@ public class HomeScreenFragment extends Fragment {
             }
         });
 
+        // Start Button listener, checks that level and name are set and starts a QuizFragment
         startBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -157,6 +160,7 @@ public class HomeScreenFragment extends Fragment {
             }
         });
 
+        // Quit Button listener, ****TO INSERT ROW INTO DB FOR DATETIME, CURRENT SESSION SCORE AND PLAYER NAME*****
         quitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -164,6 +168,7 @@ public class HomeScreenFragment extends Fragment {
             }
         });
 
+        // Instruction Button listener to create an Instruction dialog
         instructionBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -193,6 +198,7 @@ public class HomeScreenFragment extends Fragment {
             }
         });
 
+        // View Score Button listener *** SUPPOSED TO PULL LAST N ROWS OF DB****
         viewScoreBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -203,15 +209,11 @@ public class HomeScreenFragment extends Fragment {
     }
 
 
-
     public void deselectQuizes() {
         for (Button b : quizBtns) {
             b.setBackgroundColor(Color.parseColor("#f7f7f7"));
         }
 
     }
-
-
-
 
 }

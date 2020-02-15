@@ -111,7 +111,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public ArrayList<Session> getPlayerScores(String playerName) {
         ArrayList<Session> list = new ArrayList<>();
-        String query = String.format("SELECT * FROM %s WHERE %s='%s'", TABLE_SCORE_BOARD, KEY_NAME, playerName);
+        String query = String.format("SELECT * FROM %s WHERE %s='%s' ORDER BY %s DESC", TABLE_SCORE_BOARD, KEY_NAME, playerName, KEY_ID);
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(query, null);

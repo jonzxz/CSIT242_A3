@@ -81,23 +81,12 @@ public class QuizFragment extends Fragment {
         jumbleOptions(((questionCategories.get(selectedLevel)).get(0)));
 
         do {
+
             nextButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    // Increment question number related variable
-                    QuizFragment.this.numQnAnswered++;
-                    QuizFragment.this.qnNumDisplay++;
+
                     final Question q = (QuizFragment.this.questionCategories.get(selectedLevel)).get(QuizFragment.this.numQnAnswered);
-
-                    // Replace displayable elements with next question
-                    //Question Number
-                    questionNumber.setText("Question " + String.valueOf(QuizFragment.this.qnNumDisplay));
-
-                    //Title
-                    questionTitle.setText(q.toString());
-
-                    //Options
-                    jumbleOptions(((questionCategories.get(selectedLevel)).get(QuizFragment.this.numQnAnswered)));
 
                     boolean test =checkAnswer(String.valueOf(q.getAnswer()),
                             QuizFragment.this.options.get(QuizFragment.this.SELECTED_OPTION).getText().toString());
@@ -105,8 +94,17 @@ public class QuizFragment extends Fragment {
                     Log.d("CHECK", String.valueOf(test));
 //                    Log.d("ANS", String.valueOf(q.getAnswer()));
 //                    Log.d("SELECTED", String.valueOf(QuizFragment.this.options.get(QuizFragment.this.SELECTED_OPTION).getText().toString()));
-                    ((MainActivity)getActivity()).SESSION_SCORE[selectedLevel] += countScore(String.valueOf(q.getAnswer()),
-                            QuizFragment.this.options.get(QuizFragment.this.SELECTED_OPTION).getText().toString());
+
+                    if (test) {
+                        ((MainActivity) getActivity()).SESSION_SCORE[selectedLevel] += 1;
+                    }
+                    QuizFragment.this.numQnAnswered++;
+                    QuizFragment.this.qnNumDisplay++;
+                    if (numQnAnswered != 0) {
+                        questionNumber.setText("Question " + String.valueOf(QuizFragment.this.qnNumDisplay));
+                        questionTitle.setText(((questionCategories.get(selectedLevel)).get(numQnAnswered)).toString());
+                        jumbleOptions(((questionCategories.get(selectedLevel)).get(QuizFragment.this.numQnAnswered)));
+                    }
 
                     // At 4th question, replace listener for next question with result screen
                     if (numQnAnswered == NUMBER_OF_QNS-1) {
@@ -115,13 +113,13 @@ public class QuizFragment extends Fragment {
                             @Override
                             public void onClick(View v) {
 
-                                // Point accumulation
-                                ((MainActivity)getActivity()).SESSION_SCORE[selectedLevel] += countScore(String.valueOf(q.getAnswer()),
+                                // Boolean for debugging purpose to see if question is answered correctly
+                                boolean test = checkAnswer(String.valueOf(questionCategories.get(selectedLevel).get(questionCategories.get(selectedLevel).size() -1).getAnswer()),
                                         QuizFragment.this.options.get(QuizFragment.this.SELECTED_OPTION).getText().toString());
 
-                                // Boolean for debugging purpose to see if question is answered correctly
-                                boolean test =checkAnswer(String.valueOf(q.getAnswer()),
-                                        QuizFragment.this.options.get(QuizFragment.this.SELECTED_OPTION).getText().toString());
+                                if (test) {
+                                    ((MainActivity)getActivity()).SESSION_SCORE[selectedLevel] += 1;
+                                }
                                 // Debugging purposes
                                 Log.d("CHECK", String.valueOf(test));
                                 Log.d("Final score", String.valueOf(((MainActivity)getActivity()).SESSION_SCORE[selectedLevel]));

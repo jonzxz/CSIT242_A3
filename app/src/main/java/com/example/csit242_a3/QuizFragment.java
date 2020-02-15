@@ -1,6 +1,7 @@
 package com.example.csit242_a3;
 
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
@@ -11,12 +12,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
 
 
@@ -294,10 +299,10 @@ public class QuizFragment extends Fragment {
     // Function to return result dialog to be shown
     private AlertDialog getResultDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        String playerName = ((MainActivity)getActivity()).PLAYER_NAME;
+        final String playerName = ((MainActivity)getActivity()).PLAYER_NAME;
         int numCurrentQuizWrong = this.NUMBER_OF_QNS - this.numCorrect;
         int multipliedScore = this.numCorrect * ((MainActivity)getActivity()).SELECTED_LEVEL;
-        int currentTotalScore = ((MainActivity)getActivity()).getTotalScore();
+        final int currentTotalScore = ((MainActivity)getActivity()).getTotalScore();
         final TextView results = new TextView(getActivity());
 
         // Text content
@@ -317,11 +322,23 @@ public class QuizFragment extends Fragment {
                 ((MainActivity) getActivity()).fragmentManager.beginTransaction().replace(R.id.ForFrag, new QuizFragment()).commit();
                 ((MainActivity) getActivity()).SESSION_SCORE[((MainActivity)getActivity()).SELECTED_LEVEL-1] = 0;
             }
-        }).setNeutralButton("Attempt another quiz", new DialogInterface.OnClickListener() {
+        }).setNegativeButton("Attempt another quiz", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // Returns to HomeScreen
                 Log.d("clicked", "HOME");
+                ((MainActivity) getActivity()).fragmentManager.beginTransaction().replace(R.id.ForFrag, new HomeScreenFragment()).commit();
+            }
+        }).setNeutralButton("Finish session", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Creates a toast to inform end of session and display score, resets all scores to 0,
+                // sets player name to null (so that player can set new name)
+                // and returns to HomeScreen
+                String endSessionMessage = String.format("Well done %s, in this session you had %d points", playerName, currentTotalScore);
+                Toast.makeText(getActivity(), endSessionMessage, Toast.LENGTH_LONG).show();
+                ((MainActivity)getActivity()).resetAllScore();
+                ((MainActivity)getActivity()).PLAYER_NAME = null;
                 ((MainActivity) getActivity()).fragmentManager.beginTransaction().replace(R.id.ForFrag, new HomeScreenFragment()).commit();
             }
         });

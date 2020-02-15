@@ -18,7 +18,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 // Home Screen Fragment, is initial Fragment to be displayed upon activity start
 
@@ -69,6 +72,7 @@ public class HomeScreenFragment extends Fragment {
             nameLabel.setText(String.format("Hello %s!", ((MainActivity)getActivity()).PLAYER_NAME));
             setName.setEnabled(false);
         }
+
         // Displays current session score - required when player comes back to HomeScreen after completing a topic
         currentSessionScore.setText(String.format("Current Session: %s", String.valueOf(((MainActivity) getActivity()).getTotalScore())));
 

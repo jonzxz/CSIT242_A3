@@ -80,13 +80,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String query = String.format("SELECT * FROM %s ORDER BY %s DESC LIMIT 1", TABLE_SCORE_BOARD, KEY_ID);
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(query, null);
-        cursor.moveToFirst();
-        Session s = new Session();
-        s.setID(Integer.parseInt(cursor.getString(0)));
-        s.setName(cursor.getString(1));
-        s.setDate(cursor.getString(2));;
-        s.setScore(Integer.parseInt(cursor.getString(3)));
-        return s;
+
+        if (cursor.moveToFirst()) {
+            Session s = new Session();
+            s.setID(Integer.parseInt(cursor.getString(0)));
+            s.setName(cursor.getString(1));
+            s.setDate(cursor.getString(2));
+            s.setScore(Integer.parseInt(cursor.getString(3)));
+            return s;
+        }
+        return new Session("", "", 0);
     }
 
     public ArrayList<Session> getLastFiveScores() {

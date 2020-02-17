@@ -243,9 +243,12 @@ public class HomeScreenFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 String lastFiveScoreString="";
-                ArrayList<Session> list = ((MainActivity)getActivity()).dbHelper.getLastFiveScores();
-                for (Session s : list) {
-                    lastFiveScoreString += String.format("Player: %s, Session: %s, Score: %d\n", s.getName(), s.getDate(), s.getScore());
+                ArrayList<Session> list = ((MainActivity) getActivity()).dbHelper.getLastFiveScores();
+
+                if (list != null) {
+                    for (Session s : list) {
+                        lastFiveScoreString += String.format("Player: %s, Session: %s, Score: %d\n", s.getName(), s.getDate(), s.getScore());
+                    }
                 }
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
